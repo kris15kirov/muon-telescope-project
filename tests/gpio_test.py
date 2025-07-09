@@ -227,4 +227,16 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    print("Performing 20 steps in positive direction...")
+    try:
+        from muon_telescope import motor_control
+        motor_control.set_direction(True)
+        motor_control.do_steps(20)
+        print("Done.")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        try:
+            motor_control.cleanup()
+        except Exception:
+            pass
