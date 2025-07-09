@@ -82,7 +82,7 @@ install_python_deps() {
     pip install --upgrade pip
     
     # Install requirements
-    pip install -r backend/requirements.txt
+    pip install -r requirements.txt
     
     print_success "Python dependencies installed"
 }

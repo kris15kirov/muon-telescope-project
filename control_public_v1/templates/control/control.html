@@ -135,19 +135,22 @@
                 <button class="btn-green" id="dir-plus-btn">Dir +</button>
                 <button class="btn-gray" id="dir-minus-btn">Dir -</button>
             </div>
-            <div class="centered-group stepper-controls">
-                <input type="number" id="step-count" placeholder="Steps" min="-100000" max="100000" value="20">
+            <h3 style="width:100%;text-align:center;margin:10px 0 0 0;">Stepper Control</h3>
+            <div class="centered-group stepper-controls" id="manual-stepper-controls">
+                <input type="number" id="step-count" placeholder="Steps" min="-100000" max="100000" value="20"> <span
+                    style="margin-left:4px;">(steps)</span>
                 <button class="btn-gray" id="set-step-period-btn">Set Step Period</button>
             </div>
-            <div class="centered-group stepper-controls">
-                <input type="number" id="step-period" placeholder="Step Period (ms)" min="1" max="1000" value="1">
+            <div class="centered-group stepper-controls" id="manual-stepper-period">
+                <input type="number" id="step-period" placeholder="Step Period (ms)" min="1" max="1000" value="2"> <span
+                    style="margin-left:4px;">(ms)</span>
                 <button class="btn-gray" id="do-steps-btn">Do steps</button>
             </div>
-            <div class="centered-group stepper-controls">
+            <div class="centered-group stepper-controls" id="pwm-stepper-controls">
                 <input type="checkbox" id="pwm-toggle">
                 <label for="pwm-toggle" style="margin:0 8px 0 4px;">Smooth (PWM) stepping</label>
                 <input type="number" id="pwm-frequency" placeholder="PWM Frequency (Hz)" min="1" max="2000" value="500"
-                    style="width:90px;">
+                    style="width:90px;"> <span style="margin-left:4px;">(Hz)</span>
                 <button class="btn-green" id="do-steps-pwm-btn">Do steps (PWM)</button>
             </div>
         </div>
