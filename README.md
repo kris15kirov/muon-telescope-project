@@ -330,9 +330,8 @@ DJANGO_SECRET_KEY=your-production-secret-key
 DJANGO_DEBUG=True
 ```
 
-## 🏗️ Backend Setup
-
-1. Create and activate a virtual environment:
+## Backend Setup
+1. Create a virtual environment:
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate
@@ -341,17 +340,21 @@ DJANGO_DEBUG=True
    ```bash
    pip install -r requirements.txt
    ```
-3. Run migrations:
+3. Create a .env file (see .env.example):
+   ```
+   cp .env.example .env
+   # Edit .env to set your secret key and DB path
+   ```
+4. Run migrations:
    ```bash
    python3 manage.py migrate
    ```
-4. Start the Django dev server:
+5. Start the server:
    ```bash
    python3 manage.py runserver
    ```
 
-## 🖥️ Frontend Setup
-
+## Frontend Setup
 1. Navigate to the frontend directory:
    ```bash
    cd frontend
@@ -364,19 +367,17 @@ DJANGO_DEBUG=True
    ```bash
    npm run build
    ```
-4. (Optional) Start the dev server:
+
+## Deployment on Raspberry Pi
+- Follow captive_portal/README.md for Wi-Fi and captive portal setup.
+- Ensure all environment variables are set in .env.
+- Run:
    ```bash
-   npm start
+   python3 manage.py collectstatic --noinput
+   python3 manage.py migrate
+   python3 manage.py runserver 0.0.0.0:8000
    ```
+- For static file serving, WhiteNoise is integrated in Django settings.
 
 ## 🔄 Captive Portal vs Main App
-- `captive_portal/`: Handles Wi-Fi access point, DNS, DHCP, and HTTP redirection for captive portal login.
-- Main Django app: Handles user authentication, motor control, and web UI.
-
-## 🧪 Running Tests
-```bash
-python3 manage.py test
-```
-
-## 🚦 Continuous Integration
-- This project is ready for GitHub Actions CI. See `.github/workflows/ci.yml` for an example. 
+- `
