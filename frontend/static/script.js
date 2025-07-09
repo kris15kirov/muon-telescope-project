@@ -254,6 +254,51 @@ class MotorController {
                 }
             };
         }
+        const pwmToggle = document.getElementById('pwm-toggle');
+        const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
+        if (doStepsPwmBtn) {
+            doStepsPwmBtn.onclick = async function () {
+                try {
+                    const steps = parseInt(document.getElementById('step-count').value, 10);
+                    const freq = parseInt(document.getElementById('pwm-frequency').value, 10);
+                    if (isNaN(steps)) {
+                        showMessage('Please enter a valid number of steps.', 'error');
+                        return;
+                    }
+                    if (isNaN(freq) || freq < 1) {
+                        showMessage('Please enter a valid PWM frequency.', 'error');
+                        return;
+                    }
+                    const response = await fetch('/api/do_steps_pwm', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ steps: steps, frequency: freq })
+                    });
+                    if (!response.ok) {
+                        const err = await response.text();
+                        showMessage('Failed to do steps (PWM). ' + err, 'error');
+                    }
+                } catch (e) {
+                    showMessage('Network or JS error: ' + e, 'error');
+                    logError(e);
+                }
+            };
+        }
+        if (pwmToggle) {
+            pwmToggle.addEventListener('change', function () {
+                const doStepsBtn = document.getElementById('do-steps-btn');
+                const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
+                if (this.checked) {
+                    if (doStepsBtn) doStepsBtn.disabled = true;
+                    if (doStepsPwmBtn) doStepsPwmBtn.disabled = false;
+                } else {
+                    if (doStepsBtn) doStepsBtn.disabled = false;
+                    if (doStepsPwmBtn) doStepsPwmBtn.disabled = true;
+                }
+            });
+            // Set initial state
+            pwmToggle.dispatchEvent(new Event('change'));
+        }
     }
 
     async handleMoveMotor(e) {
