@@ -130,3 +130,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/ 
+
+.venv/
+db.sqlite3
+muon_telescope.db
+staticfiles/
+node_modules/ 

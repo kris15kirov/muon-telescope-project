@@ -321,3 +321,62 @@ For issues and questions:
 ---
 
 **Happy Muon Hunting! 🔬✨** 
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in the project root with at least:
+```
+DJANGO_SECRET_KEY=your-production-secret-key
+DJANGO_DEBUG=True
+```
+
+## 🏗️ Backend Setup
+
+1. Create and activate a virtual environment:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Run migrations:
+   ```bash
+   python3 manage.py migrate
+   ```
+4. Start the Django dev server:
+   ```bash
+   python3 manage.py runserver
+   ```
+
+## 🖥️ Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Build the frontend:
+   ```bash
+   npm run build
+   ```
+4. (Optional) Start the dev server:
+   ```bash
+   npm start
+   ```
+
+## 🔄 Captive Portal vs Main App
+- `captive_portal/`: Handles Wi-Fi access point, DNS, DHCP, and HTTP redirection for captive portal login.
+- Main Django app: Handles user authentication, motor control, and web UI.
+
+## 🧪 Running Tests
+```bash
+python3 manage.py test
+```
+
+## 🚦 Continuous Integration
+- This project is ready for GitHub Actions CI. See `.github/workflows/ci.yml` for an example. 
