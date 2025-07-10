@@ -6,6 +6,14 @@ function logError(...args) {
     if (DEBUG) console.error(...args);
 }
 
+function showMessage(level, msg) {
+    const m = document.createElement('div');
+    m.classList.add('flash', level);
+    m.textContent = msg;
+    document.body.appendChild(m);
+    setTimeout(() => m.remove(), 4000);
+}
+
 class MotorController {
     constructor() {
         this.isMoving = false;
@@ -424,6 +432,24 @@ class MotorController {
 
             if (response.ok) {
                 this.updateStatusDisplay(data.motor);
+                // Support both top-level and nested 'motor' keys for metrics
+                const metrics = data.motor || data;
+                if (metrics.angle !== undefined) {
+                    const angleEl = document.getElementById('m-angle');
+                    if (angleEl) angleEl.textContent = metrics.angle + ' °';
+                }
+                if (metrics.count_rate !== undefined) {
+                    const rateEl = document.getElementById('m-rate');
+                    if (rateEl) rateEl.textContent = metrics.count_rate + ' cpm';
+                }
+                if (metrics.temperature !== undefined) {
+                    const tempEl = document.getElementById('m-temp');
+                    if (tempEl) tempEl.textContent = metrics.temperature.toFixed(1) + ' °C';
+                }
+                if (metrics.step_position !== undefined) {
+                    const posEl = document.getElementById('m-pos');
+                    if (posEl) posEl.textContent = metrics.step_position;
+                }
             }
         } catch (error) {
             logError('Error updating status:', error);

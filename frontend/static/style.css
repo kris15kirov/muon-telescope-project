@@ -502,3 +502,156 @@ button.btn-gray {
 .btn-gray:hover {
     background-color: #999;
 }
+
+.stepper-pwm-controls {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    width: 100%;
+    /* NEW: force full width */
+    max-width: 100%;
+    /* NEW: prevent overflow */
+    box-sizing: border-box;
+}
+
+.stepper-pwm-controls>* {
+    position: relative !important;
+    float: none !important;
+    flex-shrink: 0;
+}
+
+.stepper-pwm-controls input[type="number"] {
+    width: 4rem;
+    min-width: 0;
+}
+
+.pwm-frequency {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+#do-steps-pwm-btn {
+    min-width: 120px;
+    /* Match other buttons */
+    width: auto;
+    max-width: 100%;
+}
+
+.muon-panel .stepper-controls {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 8px;
+    box-sizing: border-box;
+}
+
+.muon-panel .stepper-controls>* {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+:root {
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --color-panel-bg: #f8f8f8;
+    --color-primary: #2ecc40;
+}
+
+.metrics {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 24px auto;
+    max-width: 360px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.metrics__title {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.metrics__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs) var(--spacing-sm);
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.metrics__label {
+    font-weight: bold;
+    text-align: left;
+    margin: 0;
+}
+
+.metrics__value {
+    text-align: right;
+    margin: 0;
+}
+
+.row.centered {
+    justify-content: center;
+}
+
+.field-group {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.field-group input {
+    flex: 0 1 auto;
+    min-width: 50px;
+    width: auto;
+}
+
+.field-group .unit {
+    font-size: 0.9em;
+    color: #444;
+    white-space: nowrap;
+}
+
+.field-group input[type="number"],
+.metrics dd input[type="number"] {
+    width: 4ch;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.field-group input[type="number"] {
+    width: auto !important;
+}
+
+/* 1. Target the metrics list inside your muon panel */
+.muon-panel section.metrics dl {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: var(--spacing-xs, 4px) var(--spacing-sm, 8px) !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 2. Reset default dt/dd margins so they hug your grid cells */
+.muon-panel section.metrics dl dt,
+.muon-panel section.metrics dl dd {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 3. (Optional) Give your dd a little right-alignment */
+.muon-panel section.metrics dl dd {
+    text-align: right !important;
+}
