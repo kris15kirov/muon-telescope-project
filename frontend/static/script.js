@@ -1,6 +1,4 @@
 // Muon Telescope Control System JavaScript
-
-// Add debug flag and logError function at the top
 const DEBUG = false;
 function logError(...args) {
     if (DEBUG) console.error(...args);
