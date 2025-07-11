@@ -6,13 +6,12 @@ Creates the database and admin user with hashed password.
 
 import sys
 import os
+import logging
+from db import db  # type: ignore
 
 # Add the backend directory to the Python path
 backend_path = os.path.join(os.path.dirname(__file__), "..", "backend")
 sys.path.insert(0, backend_path)
-
-from db import db  # type: ignore
-import logging
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

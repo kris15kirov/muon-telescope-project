@@ -101,5 +101,4 @@ def start_motor(steps, step_delay=0.002):
 
 
 def is_motor_busy():
-    global motor_thread
     return motor_thread is not None and motor_thread.is_alive()
