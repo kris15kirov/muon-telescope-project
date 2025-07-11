@@ -22,4 +22,8 @@ urlpatterns = [
     path("api/disable_stepper/", views.api_disable_stepper, name="api_disable_stepper"),
     path("api/set_direction/", views.api_set_direction, name="api_set_direction"),
     path("api/health/", views.api_health, name="api_health"),
+    path("api/quit_motor/", views.api_quit_motor, name="api_quit_motor"),
+    path("api/pause_motor/", views.api_pause_motor, name="api_pause_motor"),
+    path("api/resume_motor/", views.api_resume_motor, name="api_resume_motor"),
+    path("api/motor_busy/", views.api_motor_busy, name="api_motor_busy"),
 ]

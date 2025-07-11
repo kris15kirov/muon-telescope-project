@@ -11,12 +11,15 @@ import json
 from datetime import datetime
 
 from pathlib import Path
+from django.contrib.auth.decorators import user_passes_test
+import threading
+import time
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 BACKEND_API_URL = "http://localhost:8000/api"  # Adjust as needed
 
-# Import motor control
 try:
     from muon_telescope.motor_control import (
         enable_motor,
@@ -24,13 +27,14 @@ try:
         set_direction,
         do_steps,
         cleanup,
+        start_motor,
+        is_motor_busy,
     )
 
     MOTOR_CONTROL_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Motor control not available: {e}")
 
-    # Mock functions for development
     def enable_motor():
         pass
 
@@ -63,6 +67,15 @@ motor_state = {
 
 # Movement logs
 movement_logs = []
+
+# Threading event for pause/resume
+motor_pause_event = threading.Event()
+motor_pause_event.set()  # Initially not paused
+
+motor_thread = None
+
+# Motor control lock for thread-safe operations
+motor_lock = threading.Lock()
 
 
 def log_movement(action, details):
@@ -377,40 +390,27 @@ def api_set_step_period(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def api_do_steps(request):
-    """Perform a specific number of steps."""
+    """Perform a specific number of steps in a non-blocking way."""
     try:
         data = json.loads(request.body)
         steps = data.get("steps", 0)
-
         if steps == 0:
             return JsonResponse(
                 {"status": "error", "message": "Steps must be non-zero"}, status=400
             )
-
-        # Get step delay from motor state or use default
         step_delay = motor_state.get("step_delay", 0.002)
-
-        # Set direction
         set_direction(steps > 0)
-
-        # Move motor
-        motor_state["is_moving"] = True
-        do_steps(abs(steps), step_delay)
-        motor_state["is_moving"] = False
-
-        # Update position (approximate)
-        position_change = (steps / TOTAL_STEPS_PER_REV) * 360
-        motor_state["current_position"] += position_change
-
-        log_movement("do_steps", {"steps": steps, "position_change": position_change})
-
-        return JsonResponse(
-            {
-                "status": "success",
-                "message": f"Completed {steps} steps",
-                "position": motor_state["current_position"],
-            }
-        )
+        started = start_motor(abs(steps), step_delay)
+        if started:
+            motor_state["is_moving"] = True
+            log_movement("do_steps_async", {"steps": steps})
+            return JsonResponse(
+                {"status": "started", "message": f"Started {steps} steps"}
+            )
+        else:
+            return JsonResponse(
+                {"status": "busy", "message": "Motor is already running"}, status=409
+            )
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
@@ -456,3 +456,76 @@ def api_do_steps_pwm(request):
         )
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+
+@require_http_methods(["GET"])
+def api_motor_busy(request):
+    """Check if the motor is currently running."""
+    return JsonResponse({"busy": is_motor_busy()})
+
+
+def is_admin(user):
+    return user.is_superuser or user.is_staff
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+@user_passes_test(is_admin)
+def api_quit_motor(request):
+    """Disable the motor (admin only)."""
+    try:
+        disable_motor()
+        motor_state["is_enabled"] = False
+        log_movement("quit_motor", {})
+        return JsonResponse({"status": "success", "message": "Motor disabled (quit)"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+@user_passes_test(is_admin)
+def api_pause_motor(request):
+    """Pause motor movement (admin only)."""
+    try:
+        motor_pause_event.clear()
+        log_movement("pause_motor", {})
+        return JsonResponse({"status": "success", "message": "Motor paused"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+@user_passes_test(is_admin)
+def api_resume_motor(request):
+    """Resume motor movement (admin only)."""
+    try:
+        motor_pause_event.set()
+        log_movement("resume_motor", {})
+        return JsonResponse({"status": "success", "message": "Motor resumed"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+
+# Example of background thread motor movement with pause/resume
+
+
+def threaded_do_steps(steps, step_delay=0.002):
+    with motor_lock:
+        enable_motor()
+        for _ in range(abs(steps)):
+            while not motor_pause_event.is_set():
+                time.sleep(0.1)  # Wait while paused
+            # Use do_steps for actual stepping, which handles GPIO or mock
+            do_steps(1, step_delay)
+        disable_motor()
+
+
+# To use in an endpoint:
+# global motor_thread
+# if motor_thread is None or not motor_thread.is_alive():
+#     motor_thread = threading.Thread(target=threaded_do_steps, args=(steps, step_delay))
+#     motor_thread.start()
+# else:
+#     return JsonResponse({"status": "error", "message": "Motor is already moving"}, status=400)

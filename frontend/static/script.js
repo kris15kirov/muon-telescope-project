@@ -320,6 +320,32 @@ class MotorController {
             // Set initial state
             setStepperControlState(pwmToggle.checked);
         }
+        // Quit Motor button (admin only)
+        const quitMotorBtn = document.getElementById('quit-motor-btn');
+        if (quitMotorBtn) {
+            quitMotorBtn.onclick = async function () {
+                if (confirm('Are you sure you want to quit (disable) the motor?')) {
+                    await fetch('/api/quit_motor/', { method: 'POST' });
+                    showMessage('Motor disabled (quit).');
+                }
+            };
+        }
+        // Pause Motor button (admin only)
+        const pauseMotorBtn = document.getElementById('pause-motor-btn');
+        if (pauseMotorBtn) {
+            pauseMotorBtn.onclick = async function () {
+                await fetch('/api/pause_motor/', { method: 'POST' });
+                showMessage('Motor paused.');
+            };
+        }
+        // Resume Motor button (admin only)
+        const resumeMotorBtn = document.getElementById('resume-motor-btn');
+        if (resumeMotorBtn) {
+            resumeMotorBtn.onclick = async function () {
+                await fetch('/api/resume_motor/', { method: 'POST' });
+                showMessage('Motor resumed.');
+            };
+        }
     }
 
     async handleMoveMotor(e) {
