@@ -29,13 +29,12 @@ This document provides a complete overview of all deliverables for the "Computer
 python3 tests/gpio_test.py
 ```
 
-### 2️⃣ Python Backend (FastAPI) ✅
+### 2️⃣ Python Backend (Django) ✅
 **Files**: 
-- `backend/main.py` - Main FastAPI application
-- `backend/motor_control.py` - GPIO motor control
-- `backend/auth.py` - Authentication and sessions
-- `backend/db.py` - Database operations
-- `backend/requirements.txt` - Python dependencies
+- `manage.py` - Django project entrypoint
+- `muon_telescope/` - Django project settings
+- `control/` - Main Django app for motor control and UI
+- `control_admin_v1/`, `control_public_v1/` - Additional Django apps
 
 **Features**:
 - **Authentication**: Session-based login system

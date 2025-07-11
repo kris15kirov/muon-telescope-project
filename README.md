@@ -272,3 +272,43 @@ To allow the Django web app to shut down the system without a password prompt, y
   ```python
   subprocess.run(["sudo", "shutdown", "-h", "+5"], check=True)
   ```
+
+## 🧱 Software Stack (Python/Django)
+
+**🐍 Main Language:**  
+- Python 3.11+
+
+**🔌 Hardware Control:**  
+- RPi.GPIO (or mock GPIO for development)
+- time – step and delay control
+
+**🧠 Backend:**  
+- Django 4.2+ – stable and secure web framework
+- SQLite3 – local database for users and logs
+- Django admin – for user and settings management
+- Django session-based authentication
+
+**🔐 Login & Security:**  
+- Password hashing (Django built-in)
+- Session and role-based access (admin/user)
+- Option: Captive Portal if Raspberry Pi is in Access Point mode (configuration is external and not part of this repository)
+
+**🌐 Frontend:**  
+- HTML/CSS + JavaScript (plain JS)
+- Jinja2/Django templates for dynamic pages
+- Static files served by Django/WhiteNoise
+
+**📶 Network & Access:**  
+- Raspberry Pi in a local network
+- (Optional) Wi-Fi Access Point mode via hostapd + dnsmasq
+
+---
+
+## Environment & Configuration
+
+- All sensitive data (SECRET_KEY, passwords, Wi-Fi credentials) should be stored in a `.env` file and loaded via `django-environ` or a similar package.
+- Example variables:
+  - `DJANGO_SECRET_KEY`
+  - `DJANGO_DEBUG`
+  - `DJANGO_DB_PATH`
+- It is recommended to change all default credentials during initial installation.
