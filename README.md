@@ -69,7 +69,7 @@ Raspberry Pi 3B+
 └─────────────┘
 ```
 
-## 🚀 Installation
+## Installation
 
 ### Step 1: Clone the Repository
 ```bash
@@ -249,13 +249,3 @@ sudo journalctl -f
 # Stop all services
 sudo systemctl stop hostapd dnsmasq
 ```
-
-## 🚀 Future Improvements
-
-- Add support for additional stepper motor drivers and sensors
-- Integrate cloud-based data logging and remote access
-- Implement user management UI for admin users
-- Add support for HTTPS and automatic certificate management
-- Improve mobile UI/UX
-- Add multi-language support
-- Expand API for integration with other research tools
