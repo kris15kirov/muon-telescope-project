@@ -1,6 +1,6 @@
 # 🔬 Computer-Controlled Muon Telescope via Web Interface
 
-A complete Raspberry Pi-based system for controlling a stepper motor telescope via a web interface with captive portal authentication.`
+A complete Raspberry Pi-based system for controlling a stepper motor telescope via a web interface with captive portal authentication.
 
 ## 🌟 Features
 
