@@ -1,2 +1,4 @@
 [flake8]
+ignore = F401,E501,E203,W291,W292
 max-line-length = 120
+exclude = .venv,venv,env,migrations,static
