@@ -149,7 +149,9 @@
         </label>
         <div class="advanced" id="advanced-controls">
             <div class="row" style="justify-content: center;">
-                <button class="btn-red" id="shutdown-btn">Shut Down</button>
+                {% if user.is_staff or user.is_superuser %}
+                <button id="shutdown-btn" class="btn btn-danger">Shut Down</button>
+                {% endif %}
                 <button class="btn-gray" id="quit-motor-btn">Quit Motor</button>
                 <button class="btn-gray" id="pause-motor-btn">Pause Motor</button>
                 <button class="btn-green" id="resume-motor-btn">Resume Motor</button>

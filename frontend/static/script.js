@@ -129,7 +129,7 @@ class MotorController {
         if (shutdownBtn) {
             shutdownBtn.onclick = async function () {
                 if (confirm('Are you sure you want to shut down the Raspberry Pi?')) {
-                    await fetch('/api/shutdown/', { method: 'POST' });
+                    await fetch('/api/shutdown/', { method: 'POST', credentials: 'same-origin' });
                     showMessage('Shutdown command sent. The device will power off.');
                 }
             };

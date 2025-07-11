@@ -16,6 +16,8 @@ import threading
 import time
 
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 
 class MyLoginView(LoginView):
@@ -98,6 +100,20 @@ def log_movement(action, details):
         movement_logs.pop(0)
 
 
+def is_admin(user):
+    return user.is_superuser or user.is_staff
+
+
+def admin_required(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+        if not is_admin(request.user):
+            raise PermissionDenied
+        return view_func(request, *args, **kwargs)
+
+    return _wrapped_view
+
+
+@login_required
 def control(request):
     if request.method == "POST":
         form = ControlForm(request.POST)
@@ -348,20 +364,19 @@ def api_health(request):
     )
 
 
-def is_admin(user):
-    return user.is_superuser or user.is_staff
-
-
 @csrf_exempt
 @require_http_methods(["POST"])
-@user_passes_test(is_admin)
+@admin_required
 def api_shutdown(request):
-    """Shutdown the Raspberry Pi (admin only)."""
+    print(
+        f"User: {request.user}, is_superuser: {request.user.is_superuser}, is_staff: {request.user.is_staff}, is_authenticated: {request.user.is_authenticated}"
+    )
     try:
         import subprocess
 
         log_movement("shutdown", {})
-        subprocess.run(["shutdown", "-h", "5"], check=True)
+        # Use '+5' for 5 minutes delay; 'now' for immediate shutdown
+        subprocess.run(["sudo", "shutdown", "-h", "+5"], check=True)
         return JsonResponse(
             {
                 "status": "success",
@@ -474,7 +489,7 @@ def api_motor_busy(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@user_passes_test(is_admin)
+@admin_required
 def api_quit_motor(request):
     """Disable the motor (admin only)."""
     try:
@@ -488,7 +503,7 @@ def api_quit_motor(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@user_passes_test(is_admin)
+@admin_required
 def api_pause_motor(request):
     """Pause motor movement (admin only)."""
     try:
@@ -501,7 +516,7 @@ def api_pause_motor(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@user_passes_test(is_admin)
+@admin_required
 def api_resume_motor(request):
     """Resume motor movement (admin only)."""
     try:

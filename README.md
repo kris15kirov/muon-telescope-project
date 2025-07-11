@@ -1,6 +1,6 @@
 # 🔬 Computer-Controlled Muon Telescope via Web Interface
 
-A complete Raspberry Pi-based system for controlling a stepper motor telescope via a web interface with captive portal authentication.
+A complete Raspberry Pi-based system for controlling a stepper motor telescope via a web interface with captive portal authentication.`
 
 ## 🌟 Features
 
@@ -249,3 +249,26 @@ sudo journalctl -f
 # Stop all services
 sudo systemctl stop hostapd dnsmasq
 ```
+
+## 🔌 Enabling Web Shutdown on Raspberry Pi or Linux
+
+To allow the Django web app to shut down the system without a password prompt, you must add a line to your sudoers file. This allows the user running your Django server to execute the shutdown command without being prompted for a password.
+
+1. Open a terminal on your Raspberry Pi (or Linux server).
+2. Run:
+   ```bash
+   sudo visudo
+   ```
+3. Add this line at the end (replace `pi` with your Django user if different):
+   ```
+   pi ALL=NOPASSWD: /sbin/shutdown
+   ```
+4. Save and exit.
+
+**Note:**
+- Do not add your Mac username or Mac-specific sudoers lines to the codebase.
+- This is a deployment/server configuration step, not a code change.
+- The shutdown command in the code is platform-agnostic and works on both Raspberry Pi and macOS/Linux:
+  ```python
+  subprocess.run(["sudo", "shutdown", "-h", "+5"], check=True)
+  ```
