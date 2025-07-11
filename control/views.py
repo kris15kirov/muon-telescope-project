@@ -15,6 +15,12 @@ from django.contrib.auth.decorators import user_passes_test
 import threading
 import time
 
+from django.contrib.auth.views import LoginView
+
+
+class MyLoginView(LoginView):
+    redirect_authenticated_user = True
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -342,18 +348,20 @@ def api_health(request):
     )
 
 
+def is_admin(user):
+    return user.is_superuser or user.is_staff
+
+
 @csrf_exempt
 @require_http_methods(["POST"])
+@user_passes_test(is_admin)
 def api_shutdown(request):
-    """Shutdown the Raspberry Pi."""
+    """Shutdown the Raspberry Pi (admin only)."""
     try:
         import subprocess
 
         log_movement("shutdown", {})
-
-        # Schedule shutdown in 5 seconds
         subprocess.run(["shutdown", "-h", "5"], check=True)
-
         return JsonResponse(
             {
                 "status": "success",
@@ -462,10 +470,6 @@ def api_do_steps_pwm(request):
 def api_motor_busy(request):
     """Check if the motor is currently running."""
     return JsonResponse({"busy": is_motor_busy()})
-
-
-def is_admin(user):
-    return user.is_superuser or user.is_staff
 
 
 @csrf_exempt

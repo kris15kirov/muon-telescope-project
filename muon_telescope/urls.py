@@ -25,12 +25,16 @@ urlpatterns = [
     path("", RedirectView.as_view(url="login/", permanent=False)),
     path("admin/", admin.site.urls),
     path(
-        "login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"
+        "login/",
+        control_views.MyLoginView.as_view(template_name="login.html"),
+        name="login",
     ),
+    path("logout/", auth_views.LogoutView.as_view(next_page="login"), name="logout"),
+    path("control/", control_views.control, name="control"),
+    path("register/", control_views.register, name="register"),
     path("control/", include("control.urls")),
     path("control-admin/", include("control_admin_v1.urls")),
     path("control-public/", include("control_public_v1.urls")),
-    path("logout/", auth_views.LogoutView.as_view(next_page="login"), name="logout"),
     # API Endpoints at root level
     path("api/motor/move/", control_views.api_move_motor, name="api_move_motor"),
     path("api/motor/stop/", control_views.api_stop_motor, name="api_stop_motor"),
