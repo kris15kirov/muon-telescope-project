@@ -1,0 +1,8 @@
+# Example dnsmasq.conf for captive portal
+# Uncomment and fill in your values
+
+interface=wlan0
+dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+dhcp-option=3,192.168.4.1
+dhcp-option=6,192.168.4.1
+address=/yourdomain.com/192.168.4.1 
