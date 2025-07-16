@@ -20,6 +20,8 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.contrib.auth import views as auth_views
 from control import views as control_views
+from django.conf import settings
+from django.views.static import serve
 
 urlpatterns = [
     path("", RedirectView.as_view(url="login/", permanent=False)),
@@ -32,9 +34,9 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(next_page="login"), name="logout"),
     path("control/", control_views.control, name="control"),
     path("register/", control_views.register, name="register"),
-    path("control/", include("control.urls")),
-    path("control-admin/", include("control_admin_v1.urls")),
-    path("control-public/", include("control_public_v1.urls")),
+    # path("control/", include("control.urls")), # archived
+    # path("control-admin/", include("control_admin_v1.urls")),  # archived
+    # path("control-public/", include("control_public_v1.urls")),  # archived
     # API Endpoints at root level
     path("api/motor/move/", control_views.api_move_motor, name="api_move_motor"),
     path("api/motor/stop/", control_views.api_stop_motor, name="api_stop_motor"),
@@ -71,4 +73,16 @@ urlpatterns = [
     ),
     path("api/do_steps/", control_views.api_do_steps, name="api_do_steps"),
     path("api/do_steps_pwm/", control_views.api_do_steps_pwm, name="api_do_steps_pwm"),
+    path("api/quit_motor/", control_views.api_quit_motor, name="api_quit_motor"),
+    path("api/pause_motor/", control_views.api_pause_motor, name="api_pause_motor"),
+    path("api/resume_motor/", control_views.api_resume_motor, name="api_resume_motor"),
+]
+
+# Serve favicon.ico at the root
+urlpatterns += [
+    path(
+        "favicon.ico",
+        serve,
+        {"path": "favicon.ico", "document_root": settings.STATICFILES_DIRS[0]},
+    ),
 ]

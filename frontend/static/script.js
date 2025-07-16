@@ -319,12 +319,12 @@ class MotorController {
             setStepperControlState(pwmToggle.checked);
         }
         // Quit Motor button (admin only)
-        const quitMotorBtn = document.getElementById('quit-motor-btn');
+        const quitMotorBtn = document.getElementById('disable-motor-btn');
         if (quitMotorBtn) {
             quitMotorBtn.onclick = async function () {
-                if (confirm('Are you sure you want to quit (disable) the motor?')) {
+                if (confirm('Are you sure you want to disable the motor?')) {
                     await fetch('/api/quit_motor/', { method: 'POST' });
-                    showMessage('Motor disabled (quit).');
+                    showMessage('Motor disabled.');
                 }
             };
         }
