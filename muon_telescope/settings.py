@@ -29,14 +29,14 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-default-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.100.2"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.100.2", "0.0.0.0"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "control_public_v1",
-    "control_admin_v1",
+    # 'control_public_v1',  # archived
+    # 'control_admin_v1',   # archived
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
