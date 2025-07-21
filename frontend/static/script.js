@@ -350,7 +350,6 @@ class MotorController {
         e.preventDefault();
 
         const formData = new FormData(e.target);
-        const direction = formData.get('direction');
         const degrees = parseFloat(formData.get('degrees'));
 
         if (!degrees || degrees <= 0 || degrees > 360) {
@@ -623,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Remove any global form submit handlers
     // Only bind to forms with class 'ajax-form' (for login/register)
     document.querySelectorAll('form.ajax-form').forEach(form => {
-        form.addEventListener('submit', e => {
+        form.addEventListener('submit', () => {
             // Your AJAX login/register code or validation here
         });
     });
