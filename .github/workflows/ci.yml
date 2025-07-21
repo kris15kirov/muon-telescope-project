@@ -51,12 +51,6 @@ jobs:
         coverage run manage.py test
         coverage report
         coverage xml
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: ./coverage.xml
-        fail_ci_if_error: true
-        token: ${{ secrets.CODECOV_TOKEN }}
     # - name: Build Docker image (optional)
     #   run: docker build -t your-dockerhub-username/muon-telescope-project .
     # - name: Push Docker image (optional)
