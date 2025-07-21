@@ -1,9 +1,15 @@
 // Muon Telescope Control System JavaScript
-
-// Add debug flag and logError function at the top
 const DEBUG = false;
 function logError(...args) {
     if (DEBUG) console.error(...args);
+}
+
+function showMessage(level, msg) {
+    const m = document.createElement('div');
+    m.classList.add('flash', level);
+    m.textContent = msg;
+    document.body.appendChild(m);
+    setTimeout(() => m.remove(), 4000);
 }
 
 class MotorController {
@@ -48,7 +54,7 @@ class MotorController {
                         showMessage('Please enter a valid number for zero position.', 'error');
                         return;
                     }
-                    const response = await fetch('/api/set_zero_position', {
+                    const response = await fetch('/api/set_zero_position/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(zero)
@@ -77,7 +83,7 @@ class MotorController {
                         showMessage('Please select a valid angle.', 'error');
                         return;
                     }
-                    const response = await fetch('/api/goto_angle', {
+                    const response = await fetch('/api/goto_angle/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ angle: angle })
@@ -121,7 +127,7 @@ class MotorController {
         if (shutdownBtn) {
             shutdownBtn.onclick = async function () {
                 if (confirm('Are you sure you want to shut down the Raspberry Pi?')) {
-                    await fetch('/api/shutdown', { method: 'POST' });
+                    await fetch('/api/shutdown/', { method: 'POST', credentials: 'same-origin' });
                     showMessage('Shutdown command sent. The device will power off.');
                 }
             };
@@ -132,7 +138,7 @@ class MotorController {
         if (enableStepperBtn) {
             enableStepperBtn.onclick = async function () {
                 try {
-                    const response = await fetch('/api/enable_stepper', {
+                    const response = await fetch('/api/enable_stepper/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({})
@@ -151,7 +157,7 @@ class MotorController {
         if (disableStepperBtn) {
             disableStepperBtn.onclick = async function () {
                 try {
-                    const response = await fetch('/api/disable_stepper', {
+                    const response = await fetch('/api/disable_stepper/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({})
@@ -172,7 +178,7 @@ class MotorController {
         } else {
             dirPlusBtn.onclick = async function () {
                 try {
-                    const response = await fetch('/api/set_direction', {
+                    const response = await fetch('/api/set_direction/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ direction: 'plus' })
@@ -191,7 +197,7 @@ class MotorController {
         if (dirMinusBtn) {
             dirMinusBtn.onclick = async function () {
                 try {
-                    const response = await fetch('/api/set_direction', {
+                    const response = await fetch('/api/set_direction/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ direction: 'minus' })
@@ -215,7 +221,7 @@ class MotorController {
                         showMessage('Please enter a valid step period.', 'error');
                         return;
                     }
-                    const response = await fetch('/api/set_step_period', {
+                    const response = await fetch('/api/set_step_period/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ period_ms: period })
@@ -239,7 +245,7 @@ class MotorController {
                         showMessage('Please enter a valid number of steps.', 'error');
                         return;
                     }
-                    const response = await fetch('/api/do_steps', {
+                    const response = await fetch('/api/do_steps/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ steps: steps })
@@ -252,6 +258,90 @@ class MotorController {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
                 }
+            };
+        }
+        const pwmToggle = document.getElementById('pwm-toggle');
+        const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
+        if (doStepsPwmBtn) {
+            doStepsPwmBtn.onclick = async function () {
+                try {
+                    const steps = parseInt(document.getElementById('step-count').value, 10);
+                    const freq = parseInt(document.getElementById('pwm-frequency').value, 10);
+                    if (isNaN(steps)) {
+                        showMessage('Please enter a valid number of steps.', 'error');
+                        return;
+                    }
+                    if (isNaN(freq) || freq < 1) {
+                        showMessage('Please enter a valid PWM frequency.', 'error');
+                        return;
+                    }
+                    const response = await fetch('/api/do_steps_pwm/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ steps: steps, frequency: freq })
+                    });
+                    if (!response.ok) {
+                        const err = await response.text();
+                        showMessage('Failed to do steps (PWM). ' + err, 'error');
+                    }
+                } catch (e) {
+                    showMessage('Network or JS error: ' + e, 'error');
+                    logError(e);
+                }
+            };
+        }
+        if (pwmToggle) {
+            function setStepperControlState(isPwm) {
+                // Manual controls
+                const stepCount = document.getElementById('step-count');
+                const stepPeriod = document.getElementById('step-period');
+                const doStepsBtn = document.getElementById('do-steps-btn');
+                const setStepPeriodBtn = document.getElementById('set-step-period-btn');
+                // PWM controls
+                const pwmFrequency = document.getElementById('pwm-frequency');
+                const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
+                // Helper to set disabled and opacity
+                function setDisabledGroup(elems, disabled) {
+                    elems.forEach(el => {
+                        if (el) {
+                            el.disabled = disabled;
+                            el.style.opacity = disabled ? 0.5 : 1.0;
+                        }
+                    });
+                }
+                setDisabledGroup([stepCount, stepPeriod, doStepsBtn, setStepPeriodBtn], isPwm);
+                setDisabledGroup([pwmFrequency, doStepsPwmBtn], !isPwm);
+            }
+            pwmToggle.addEventListener('change', function () {
+                setStepperControlState(this.checked);
+            });
+            // Set initial state
+            setStepperControlState(pwmToggle.checked);
+        }
+        // Quit Motor button (admin only)
+        const quitMotorBtn = document.getElementById('quit-motor-btn');
+        if (quitMotorBtn) {
+            quitMotorBtn.onclick = async function () {
+                if (confirm('Are you sure you want to quit (disable) the motor?')) {
+                    await fetch('/control/api/quit_motor/', { method: 'POST' });
+                    showMessage('Motor disabled (quit).');
+                }
+            };
+        }
+        // Pause Motor button (admin only)
+        const pauseMotorBtn = document.getElementById('pause-motor-btn');
+        if (pauseMotorBtn) {
+            pauseMotorBtn.onclick = async function () {
+                await fetch('/control/api/pause_motor/', { method: 'POST' });
+                showMessage('Motor paused.');
+            };
+        }
+        // Resume Motor button (admin only)
+        const resumeMotorBtn = document.getElementById('resume-motor-btn');
+        if (resumeMotorBtn) {
+            resumeMotorBtn.onclick = async function () {
+                await fetch('/control/api/resume_motor/', { method: 'POST' });
+                showMessage('Motor resumed.');
             };
         }
     }
@@ -277,7 +367,7 @@ class MotorController {
         moveBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/motor/move', {
+            const response = await fetch('/api/motor/move/', {
                 method: 'POST',
                 body: formData
             });
@@ -309,7 +399,7 @@ class MotorController {
         stopBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/motor/stop', {
+            const response = await fetch('/api/motor/stop/', {
                 method: 'POST'
             });
 
@@ -339,7 +429,7 @@ class MotorController {
         resetBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/motor/reset', {
+            const response = await fetch('/api/motor/reset/', {
                 method: 'POST'
             });
 
@@ -361,11 +451,29 @@ class MotorController {
 
     async updateMotorStatus() {
         try {
-            const response = await fetch('/api/status');
+            const response = await fetch('/api/status/');
             const data = await response.json();
 
             if (response.ok) {
                 this.updateStatusDisplay(data.motor);
+                // Support both top-level and nested 'motor' keys for metrics
+                const metrics = data.motor || data;
+                if (metrics.angle !== undefined) {
+                    const angleEl = document.getElementById('m-angle');
+                    if (angleEl) angleEl.textContent = metrics.angle + ' °';
+                }
+                if (metrics.count_rate !== undefined) {
+                    const rateEl = document.getElementById('m-rate');
+                    if (rateEl) rateEl.textContent = metrics.count_rate + ' cpm';
+                }
+                if (metrics.temperature !== undefined) {
+                    const tempEl = document.getElementById('m-temp');
+                    if (tempEl) tempEl.textContent = metrics.temperature.toFixed(1) + ' °C';
+                }
+                if (metrics.step_position !== undefined) {
+                    const posEl = document.getElementById('m-pos');
+                    if (posEl) posEl.textContent = metrics.step_position;
+                }
             }
         } catch (error) {
             logError('Error updating status:', error);

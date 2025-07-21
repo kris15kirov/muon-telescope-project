@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-default-key")
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]  # Must be set in environment
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
@@ -86,7 +86,7 @@ WSGI_APPLICATION = "muon_telescope.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.getenv("DJANGO_DB_PATH", BASE_DIR / "db.sqlite3"),
+        "NAME": os.environ["DJANGO_DB_PATH"],  # Must be set in environment
     }
 }
 

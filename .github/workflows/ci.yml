@@ -11,7 +11,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m venv venv
         source venv/bin/activate
@@ -24,7 +24,39 @@ jobs:
       run: |
         source venv/bin/activate
         black --check .
-    - name: Run tests
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+    - name: Lint frontend with ESLint
+      run: |
+        cd frontend
+        npx eslint .
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm run build
+    - name: Run Django tests
       run: |
         source venv/bin/activate
         python manage.py test
+    - name: Run tests with coverage
+      run: |
+        source venv/bin/activate
+        pip install coverage
+        coverage run manage.py test
+        coverage report
+        coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        fail_ci_if_error: true
+    # - name: Build Docker image (optional)
+    #   run: docker build -t your-dockerhub-username/muon-telescope-project .
+    # - name: Push Docker image (optional)
+    #   run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin && docker push your-dockerhub-username/muon-telescope-project
