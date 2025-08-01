@@ -117,8 +117,9 @@ cd /home/pi/muon-telescope-project
 # Set development environment
 export DJANGO_DEBUG=True
 
-# Collect static files
+# Activate virtual environment and run Django commands
 echo "📦 Collecting static files..."
+source venv/bin/activate
 python3 manage.py collectstatic --noinput
 
 # Run migrations

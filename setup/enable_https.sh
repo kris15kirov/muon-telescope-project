@@ -56,8 +56,9 @@ else
     echo "🔧 Using development settings (DEBUG=True)"
 fi
 
-# Collect static files
+# Activate virtual environment and run Django commands
 echo "📦 Collecting static files..."
+source venv/bin/activate
 python3 manage.py collectstatic --noinput
 
 # Run migrations
