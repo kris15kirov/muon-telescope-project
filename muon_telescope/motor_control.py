@@ -77,15 +77,25 @@ def do_steps(steps, step_delay=0.002):
 def do_steps_pwm(steps, frequency=500):
     global pwm_started
     with motor_lock:
-        enable_motor()
-        set_direction(steps > 0)
-        if not pwm_started:
-            pwm.start(50)
-            pwm_started = True
-        time.sleep(abs(steps) / frequency)
-        pwm.stop()
-        pwm_started = False
-        disable_motor()
+        try:
+            enable_motor()
+            set_direction(steps > 0)
+
+            # Calculate step delay based on frequency
+            step_delay = 1.0 / frequency
+
+            # Use direct stepping for reliability (no PWM)
+            for _ in range(abs(steps)):
+                GPIO.output(STEP_PIN, GPIO.HIGH)
+                time.sleep(step_delay / 2)
+                GPIO.output(STEP_PIN, GPIO.LOW)
+                time.sleep(step_delay / 2)
+
+            disable_motor()
+        except Exception as e:
+            print(f"Error in do_steps_pwm: {e}")
+            disable_motor()
+            raise
 
 
 def cleanup():

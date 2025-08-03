@@ -450,6 +450,18 @@ def api_do_steps_pwm(request):
             return JsonResponse(
                 {"status": "error", "message": "Steps must be non-zero"}, status=400
             )
+
+        # Limit steps to prevent long blocking operations
+        max_steps = 100  # Maximum steps to prevent timeouts
+        if abs(steps) > max_steps:
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "message": f"Steps limited to {max_steps} to prevent timeouts",
+                },
+                status=400,
+            )
+
         # Set direction
         set_direction(steps > 0)
         # Move motor using PWM
@@ -489,9 +501,8 @@ def api_motor_busy(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@admin_required
 def api_quit_motor(request):
-    """Disable the motor (admin only)."""
+    """Disable the motor."""
     try:
         disable_motor()
         motor_state["is_enabled"] = False
