@@ -117,11 +117,17 @@ python3 tests/gpio_test.py
 ### Step 7: Configure Network Access
 Choose your deployment option:
 
-**Option A: Home Network (Recommended)**
+**Option A: Multi-Network (Recommended)**
+- Works with both home and university WiFi
+- Automatic network switching with priority
+- Run: `sudo ./setup/configure_multi_network.sh`
+- Follow: `MULTI_NETWORK_SETUP.md`
+
+**Option B: Home Network Only**
 - Connect Pi to your home WiFi
 - Access via: `https://[PI_IP]/control/`
 
-**Option B: University Network**
+**Option C: University Network Only**
 - Follow instructions in `UNIVERSITY_SETUP.md`
 - Run: `sudo ./setup/configure_university_wifi.sh`
 
@@ -138,13 +144,14 @@ sudo systemctl start muon-telescope-dev.service
 
 ### Connecting to the System
 
-**Home Network Setup:**
-1. **Connect to your home WiFi** on any device
-2. **Access Web Interface**: `https://[PI_IP]/control/`
-3. **Login**: Use the admin account you created
+**Multi-Network Setup (Recommended):**
+1. **Configure both networks** using the setup script
+2. **Pi automatically switches** between home and university WiFi
+3. **Access from either network**: `https://[PI_IP]/control/`
+4. **Login**: Use the admin account you created
 
-**University Network Setup:**
-1. **Connect to university WiFi** on any device
+**Single Network Setup:**
+1. **Connect to the appropriate WiFi** (home or university)
 2. **Access Web Interface**: `https://[PI_IP]/control/`
 3. **Login**: Use the admin account you created
 
@@ -181,6 +188,7 @@ muon-telescope-project/
 ├── frontend/                # Additional static assets
 │   └── static/
 ├── setup/                   # Setup scripts
+│   ├── configure_multi_network.sh    # Multi-network setup
 │   ├── configure_university_wifi.sh  # University WiFi setup
 │   ├── check_network_status.sh       # Network diagnostics
 │   └── install_nginx.sh              # Web server setup
