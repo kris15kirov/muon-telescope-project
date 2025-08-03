@@ -281,7 +281,7 @@ def api_set_zero_position(request):
     """Set zero position reference."""
     try:
         data = json.loads(request.body)
-        zero_pos = int(data)
+        zero_pos = int(data.get("position", 0))
 
         motor_state["current_position"] = zero_pos
 
@@ -503,9 +503,8 @@ def api_quit_motor(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@admin_required
 def api_pause_motor(request):
-    """Pause motor movement (admin only)."""
+    """Pause motor movement."""
     try:
         motor_pause_event.clear()
         log_movement("pause_motor", {})
@@ -516,9 +515,8 @@ def api_pause_motor(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@admin_required
 def api_resume_motor(request):
-    """Resume motor movement (admin only)."""
+    """Resume motor movement."""
     try:
         motor_pause_event.set()
         log_movement("resume_motor", {})
