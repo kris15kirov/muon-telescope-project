@@ -122,6 +122,7 @@ Choose your deployment option:
 - Automatic network switching with priority
 - Run: `sudo ./setup/configure_multi_network.sh`
 - Follow: `MULTI_NETWORK_SETUP.md`
+- **Quick switching**: Use `NETWORK_SWITCHING_GUIDE.md`
 
 **Option B: Home Network Only**
 - Connect Pi to your home WiFi
@@ -189,6 +190,8 @@ muon-telescope-project/
 │   └── static/
 ├── setup/                   # Setup scripts
 │   ├── configure_multi_network.sh    # Multi-network setup
+│   ├── switch_to_university.sh       # Switch to university-only mode
+│   ├── switch_to_multi_network.sh    # Switch to multi-network mode
 │   ├── configure_university_wifi.sh  # University WiFi setup
 │   ├── check_network_status.sh       # Network diagnostics
 │   └── install_nginx.sh              # Web server setup
