@@ -145,6 +145,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 LOGIN_REDIRECT_URL = "/control/"
 LOGOUT_REDIRECT_URL = "/login/"
+LOGIN_URL = "/login/"
 
 # Security settings for dev vs prod
 if DEBUG:
