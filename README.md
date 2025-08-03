@@ -1,15 +1,14 @@
 # 🔬 Computer-Controlled Muon Telescope via Web Interface
 
-A complete Raspberry Pi-based system for controlling a stepper motor telescope via a web interface with captive portal authentication.
+A complete Raspberry Pi-based system for controlling a stepper motor telescope via a web interface with secure authentication.
 
 ## 🌟 Features
 
-- **Wi-Fi Access Point**: Creates "Muon Telescope" network with captive portal
 - **Web Interface**: Modern, responsive UI for motor control
 - **Authentication**: Secure login system with session management
 - **Motor Control**: Precise stepper motor control via DM556 driver
 - **Real-time Updates**: Live status updates and movement logging
-- **Offline Operation**: Works entirely without internet connection
+- **Network Access**: Works on home network for easy access
 - **Database Logging**: Tracks all motor movements and user actions
 
 ## 🏗️ Architecture
@@ -23,9 +22,9 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 │ │             │ │    │ │   Backend     │  │    │ │   Driver    │ │
 │ └─────────────┘ │    │ └───────────────┘  │    │ └─────────────┘ │
 │                 │    │ ┌─────────────┐    │    │ ┌─────────────┐ │
-│                 │    │ │  hostapd    │    │    │ │   GPIO      │ │
-│                 │    │ │  dnsmasq    │    │    │ │  Control    │ │
-│                 │    │ │  iptables   │    │    │ └─────────────┘ │
+│                 │    │ │   Nginx     │    │    │ │   GPIO      │ │
+│                 │    │ │   HTTPS     │    │    │ │  Control    │ │
+│                 │    │ │   Proxy     │    │    │ └─────────────┘ │
 │                 │    │ └─────────────┘    │    └─────────────────┘
 └─────────────────┘    └────────────────────┘
 ```
@@ -43,6 +42,7 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 - Raspberry Pi OS (Debian-based)
 - Python 3.11+
 - Django 4.2+
+- Nginx (web server)
 - Required packages (see installation)
 
 ## 🔧 Hardware Setup
