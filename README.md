@@ -83,12 +83,10 @@ cd muon-telescope-project
 sudo apt update && sudo apt upgrade -y
 
 # Install required packages
-sudo apt install -y python3-pip python3-venv hostapd dnsmasq iptables-persistent
+sudo apt install -y python3-pip python3-venv nginx
 
 # Enable services
-sudo systemctl unmask hostapd
-sudo systemctl enable hostapd
-sudo systemctl enable dnsmasq
+sudo systemctl enable nginx
 ```
 
 ### Step 3: Install Python Dependencies
@@ -116,30 +114,48 @@ python3 manage.py createsuperuser
 python3 tests/gpio_test.py
 ```
 
-### Step 7: Configure Captive Portal
-Follow the detailed instructions in `captive_portal/README.md`
+### Step 7: Configure Network Access
+Choose your deployment option:
+
+**Option A: Home Network (Recommended)**
+- Connect Pi to your home WiFi
+- Access via: `https://[PI_IP]/control/`
+
+**Option B: University Network**
+- Follow instructions in `UNIVERSITY_SETUP.md`
+- Run: `sudo ./setup/configure_university_wifi.sh`
 
 ### Step 8: Start the Application
 ```bash
 # Manual start
 python3 manage.py runserver 0.0.0.0:8000
+
+# Or use systemd service (if configured)
+sudo systemctl start muon-telescope-dev.service
 ```
 
 ## 🌐 Usage
 
 ### Connecting to the System
 
-1. **Connect to Wi-Fi**:
-   - SSID: `Muon Telescope`
-   - Password: `muon123456`
+**Home Network Setup:**
+1. **Connect to your home WiFi** on any device
+2. **Access Web Interface**: `https://[PI_IP]/control/`
+3. **Login**: Use the admin account you created
 
-2. **Access Web Interface**:
-   - Open any website in your browser
-   - You'll be automatically redirected to the login page
-   - Or navigate directly to: `http://192.168.4.1:8000`
+**University Network Setup:**
+1. **Connect to university WiFi** on any device
+2. **Access Web Interface**: `https://[PI_IP]/control/`
+3. **Login**: Use the admin account you created
 
-3. **Login**:
-   - Use the admin account you created, or register a new user
+**Find Pi IP Address:**
+```bash
+# On the Pi
+hostname -I
+
+# Or check network status
+sudo ./setup/check_network_status.sh
+```
 
 ### Controlling the Motor
 
@@ -164,9 +180,10 @@ muon-telescope-project/
 │   └── wsgi.py
 ├── frontend/                # Additional static assets
 │   └── static/
-├── captive_portal/          # Network configuration
-│   └── README.md            # Setup instructions
 ├── setup/                   # Setup scripts
+│   ├── configure_university_wifi.sh  # University WiFi setup
+│   ├── check_network_status.sh       # Network diagnostics
+│   └── install_nginx.sh              # Web server setup
 │   └── init_db.py           # (Legacy) Database initialization
 ├── tests/                   # Test scripts
 │   └── gpio_test.py         # GPIO test script
