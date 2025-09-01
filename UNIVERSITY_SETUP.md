@@ -19,7 +19,7 @@ This guide helps you configure your Raspberry Pi-based muon telescope to work on
 
 **Option B: SSH Connection**
 ```bash
-ssh pi@192.168.2.186  # Use current IP from terminal
+ssh pi@[PI_IP]  # Use current IP from terminal
 ```
 
 ### Step 2: Run University WiFi Configuration
@@ -90,7 +90,7 @@ sed -i "s/ALLOWED_HOSTS = \[/ALLOWED_HOSTS = [\"$NEW_IP\", /" muon_telescope/set
 sed -i "s/CSRF_TRUSTED_ORIGINS = \[/CSRF_TRUSTED_ORIGINS = [\"https:\/\/$NEW_IP\", /" muon_telescope/settings.py
 
 # Update Nginx configuration
-sudo sed -i "s/server_name 192.168.100.36/server_name $NEW_IP/" /etc/nginx/sites-available/muon-telescope
+sudo sed -i "s/server_name [0-9.]*;/server_name $NEW_IP;/" /etc/nginx/sites-available/muon-telescope
 sudo nginx -t && sudo systemctl reload nginx
 
 # Restart Django service

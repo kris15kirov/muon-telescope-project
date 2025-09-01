@@ -6,7 +6,7 @@
 echo "=== Deploying Monitoring and Recovery Tools ==="
 
 # Check if Pi is reachable
-PI_IP=${1:-"192.168.100.36"}  # Default IP, can be overridden
+PI_IP=${1:-"[PI_IP]"}  # Default IP, can be overridden
 if ! ping -c 1 $PI_IP > /dev/null 2>&1; then
     echo "❌ Raspberry Pi is not reachable at $PI_IP"
     echo "Please ensure the Pi is powered on and connected to the network"

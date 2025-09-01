@@ -30,7 +30,7 @@ print_error() {
 # Check if Raspberry Pi IP is provided
 if [ -z "$1" ]; then
     print_error "Usage: $0 <raspberry-pi-ip>"
-    print_status "Example: $0 192.168.1.100"
+    print_status "Example: $0 [PI_IP_ADDRESS]"
     exit 1
 fi
 

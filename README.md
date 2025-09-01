@@ -191,14 +191,11 @@ Edit `muon_telescope/motor_control.py` to adjust:
 - `PWM_FREQ`: Step pulse frequency (default: 500 Hz)
 
 ### Network Settings
-Edit captive portal configuration:
-- Wi-Fi SSID: `/etc/hostapd/hostapd.conf`
-- IP range: `/etc/dnsmasq.conf`
-- Port: Django's `manage.py runserver` and iptables rules
+The system automatically connects to university WiFi and updates its IP address dynamically.
+No manual network configuration is required.
 
 ### Security
 - Change default passwords in production
-- Update Wi-Fi password in hostapd config
 - Use HTTPS in production environments
 
 ## 🐛 Troubleshooting
@@ -214,19 +211,19 @@ python3 tests/gpio_test.py
 # Check jumper wires
 ```
 
-**Wi-Fi not appearing:**
+**Wi-Fi not connecting:**
 ```bash
-# Check hostapd status
-sudo systemctl status hostapd
+# Check WiFi status
+sudo iwconfig wlan0
 
 # View logs
-sudo journalctl -u hostapd -f
+sudo journalctl -u wpa_supplicant -f
 ```
 
 **Web interface not loading:**
 ```bash
 # Check Django status
-curl http://192.168.4.1:8000/
+curl http://[PI_IP]:8000/
 
 # Check iptables rules
 sudo iptables -t nat -L -n -v
@@ -254,8 +251,8 @@ sudo journalctl -f
 
 **Reset everything:**
 ```bash
-# Stop all services
-sudo systemctl stop hostapd dnsmasq
+# Restart networking
+sudo systemctl restart wpa_supplicant
 ```
 
 ## 🔌 Enabling Web Shutdown on Raspberry Pi or Linux
@@ -299,7 +296,7 @@ To allow the Django web app to shut down the system without a password prompt, y
 **🔐 Login & Security:**  
 - Password hashing (Django built-in)
 - Session and role-based access (admin/user)
-- Option: Captive Portal if Raspberry Pi is in Access Point mode (configuration is external and not part of this repository)
+- University WiFi client mode for easy network access
 
 **🌐 Frontend:**  
 - HTML/CSS + JavaScript (plain JS)
@@ -308,7 +305,7 @@ To allow the Django web app to shut down the system without a password prompt, y
 
 **📶 Network & Access:**  
 - Raspberry Pi in a local network
-- (Optional) Wi-Fi Access Point mode via hostapd + dnsmasq
+- University WiFi client mode for reliable network access
 
 ---
 

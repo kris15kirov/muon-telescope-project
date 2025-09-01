@@ -58,8 +58,8 @@ def main():
         print("1. Install Python dependencies: pip install -r backend/requirements.txt")
         print("2. Test GPIO connections: python tests/gpio_test.py")
         print("3. Start the web server: python backend/main.py")
-        print("4. Configure captive portal (see captive_portal/README.md)")
-        print("\n🌐 Access the web interface at: http://192.168.4.1:8000")
+        print("4. Configure university WiFi connection")
+        print("\n🌐 Access the web interface at: http://[PI_IP]:8000")
         print("👤 Login with: admin / admin")
     else:
         print("\n❌ Database setup failed!")

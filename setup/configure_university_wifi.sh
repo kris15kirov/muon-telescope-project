@@ -91,8 +91,8 @@ configure_static_ip() {
     echo "Do you want to configure a static IP? (y/n)"
     read -r response
     if [[ "$response" =~ ^[Yy]$ ]]; then
-        read -p "Static IP address (e.g., 192.168.1.100): " STATIC_IP
-        read -p "Gateway (e.g., 192.168.1.1): " GATEWAY
+        read -p "Static IP address (e.g., 10.0.0.100): " STATIC_IP
+        read -p "Gateway (e.g., 10.0.0.1): " GATEWAY
         read -p "DNS servers (e.g., 8.8.8.8,8.8.4.4): " DNS_SERVERS
         
         # Configure dhcpcd for static IP
@@ -148,7 +148,7 @@ update_nginx_config() {
     
     if [ -n "$CURRENT_IP" ] && [ -f "/etc/nginx/sites-available/muon-telescope" ]; then
         # Update Nginx server_name
-        sed -i "s/server_name 192.168.100.36/server_name $CURRENT_IP/" /etc/nginx/sites-available/muon-telescope
+        sed -i "s/server_name [0-9.]*;/server_name $CURRENT_IP;/" /etc/nginx/sites-available/muon-telescope
         
         # Test and reload Nginx
         nginx -t && systemctl reload nginx
