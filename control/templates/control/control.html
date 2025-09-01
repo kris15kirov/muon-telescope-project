@@ -128,18 +128,18 @@
             </form>
         </div>
         <div class="centered-group">
-            <button class="btn-green" id="set-zero-btn">Set Zero Position</button>
+            <button class="btn-red" id="set-zero-btn">Set Zero Position</button>
             <input type="number" id="zero-pos" placeholder="Zero Position" value="0">
         </div>
         <div class="go-to-angle-panel">
-            <input type="range" min="-75" max="75" value="0" id="angle-slider" style="width:100%;">
+            <input type="range" min="-75" max="75" value="0" id="angle-slider" style="width:100%;" disabled="true">
             <div class="slider-labels">
                 <span>-75</span><span>-60</span><span>-45</span><span>-30</span><span>-15</span><span>0</span><span>15</span><span>30</span><span>45</span><span>60</span><span>75</span>
             </div>
             <div style="text-align:center;margin:8px 0;">
                 <span id="angle-value">0</span>
             </div>
-            <div style="display: flex; justify-content: center;">
+            <div style="display: flex; justify-content: center;" disabled="true">
                 <button class="btn-gray" id="goto-angle-btn">Go to Angle</button>
             </div>
         </div>
@@ -150,18 +150,17 @@
         <div class="advanced" id="advanced-controls">
             <div class="row" style="justify-content: center;">
                 {% if user.is_staff or user.is_superuser %}
-                <button id="shutdown-btn" class="btn btn-danger">Shut Down</button>
                 {% endif %}
-                <button class="btn-gray" id="quit-motor-btn">Quit Motor</button>
+		<!--        <button class="btn-gray" id="quit-motor-btn">Quit Motor</button> --!>
                 <button class="btn-gray" id="pause-motor-btn">Pause Motor</button>
-                <button class="btn-green" id="resume-motor-btn">Resume Motor</button>
+                <button class="btn-gray" id="resume-motor-btn">Resume Motor</button>
             </div>
             <div class="row advanced-btn-row">
-                <button class="btn-green" id="enable-stepper-btn">Enable Stepper</button>
+                <button class="btn-gray" id="enable-stepper-btn">Enable Stepper</button>
                 <button class="btn-gray" id="disable-stepper-btn">Disable Stepper</button>
             </div>
             <div class="row advanced-btn-row">
-                <button class="btn-green" id="dir-plus-btn">Dir +</button>
+                <button class="btn-gray" id="dir-plus-btn">Dir +</button>
                 <button class="btn-gray" id="dir-minus-btn">Dir -</button>
             </div>
             <h3 style="width:100%;text-align:center;margin:10px 0 0 0;">Stepper Control</h3>

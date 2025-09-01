@@ -46,38 +46,25 @@ class MotorController {
 
         // Set Zero Position button
         const setZeroBtn = document.getElementById('set-zero-btn');
-        if (setZeroBtn) {
+	const AngleSlider = document.getElementById('angle-slider');
+        // Go to Angle button
+        const gotoAngleBtn = document.getElementById('goto-angle-btn');
+	    if (setZeroBtn&&AngleSlider&&gotoAngleBtn) {
             setZeroBtn.onclick = async function () {
-                try {
-                    const zero = parseInt(document.getElementById('zero-pos').value, 10);
-                    if (isNaN(zero)) {
-                        showMessage('Please enter a valid number for zero position.', 'error');
-                        return;
-                    }
-                    const response = await fetch('/api/set_zero_position/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(zero)
-                    });
-                    if (response.ok) {
-                        showMessage('Zero position set!');
-                    } else {
-                        const err = await response.text();
-                        showMessage('Failed to set zero position. ' + err, 'error');
-                        logError('422 or other error:', err);
-                    }
-                } catch (e) {
-                    showMessage('Network or JS error: ' + e, 'error');
-                    logError(e);
-                }
+            setZeroBtn.className = "btn-green";
+	    AngleSlider.disabled = false;
+	    gotoAngleBtn.className = "btn-green";
+	    gotoAngleBtn.disabled = false;
             };
         }
 
-        // Go to Angle button
-        const gotoAngleBtn = document.getElementById('goto-angle-btn');
+
         if (gotoAngleBtn) {
             gotoAngleBtn.onclick = async function () {
                 try {
+		    
+		    gotoAngleBtn.className = 'btn-red';
+		    gotoAngleBtn.disabled = true;
                     const angle = parseFloat(document.getElementById('angle-slider').value);
                     if (isNaN(angle)) {
                         showMessage('Please select a valid angle.', 'error');
@@ -90,6 +77,8 @@ class MotorController {
                     });
                     if (response.ok) {
                         showMessage('Moving to angle...');
+			gotoAngleBtn.className = 'btn-reg';
+
                     } else {
                         const err = await response.text();
                         showMessage('Failed to move to angle. ' + err, 'error');
@@ -135,7 +124,8 @@ class MotorController {
 
         // Advanced controls (admin only)
         const enableStepperBtn = document.getElementById('enable-stepper-btn');
-        if (enableStepperBtn) {
+        const disableStepperBtn = document.getElementById('disable-stepper-btn');
+	if (enableStepperBtn && disableStepperBtn) {
             enableStepperBtn.onclick = async function () {
                 try {
                     const response = await fetch('/api/enable_stepper/', {
@@ -146,17 +136,19 @@ class MotorController {
                     if (!response.ok) {
                         const err = await response.text();
                         showMessage('Failed to enable stepper. ' + err, 'error');
-                    }
+                    } else {
+		    	enableStepperBtn.className = "btn-green";
+			disableStepperBtn.className = "btn-gray";
+		    }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
                 }
             };
-        }
-        const disableStepperBtn = document.getElementById('disable-stepper-btn');
-        if (disableStepperBtn) {
-            disableStepperBtn.onclick = async function () {
+            
+          disableStepperBtn.onclick = async function () {
                 try {
+			
                     const response = await fetch('/api/disable_stepper/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -165,17 +157,23 @@ class MotorController {
                     if (!response.ok) {
                         const err = await response.text();
                         showMessage('Failed to disable stepper. ' + err, 'error');
-                    }
-                } catch (e) {
+                    } else {
+			    enableStepperBtn.className = "btn-gray";
+			    disableStepperBtn.className = "btn-red";
+			    setZeroBtn.className = "btn-green";
+			    AngleSlider.disabled = true;
+			    gotoBtn.className = "btn-red";
+			    gotoBtn.disabled = true;
+		    }
+              } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
                 }
             };
         }
         const dirPlusBtn = document.getElementById('dir-plus-btn');
-        if (!dirPlusBtn) {
-            showMessage('Control button missing from page.', 'error');
-        } else {
+        const dirMinusBtn = document.getElementById('dir-minus-btn');
+        if (dirPlusBtn&&dirMinusBtn) {
             dirPlusBtn.onclick = async function () {
                 try {
                     const response = await fetch('/api/set_direction/', {
@@ -186,15 +184,16 @@ class MotorController {
                     if (!response.ok) {
                         const err = await response.text();
                         showMessage('Failed to set direction +. ' + err, 'error');
-                    }
+                    } else {
+			dirPlusBtn.className = "btn-green";
+			dirMinusBtn.className = "btn-gray";
+		    }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
                 }
             };
-        }
-        const dirMinusBtn = document.getElementById('dir-minus-btn');
-        if (dirMinusBtn) {
+        
             dirMinusBtn.onclick = async function () {
                 try {
                     const response = await fetch('/api/set_direction/', {
@@ -205,7 +204,10 @@ class MotorController {
                     if (!response.ok) {
                         const err = await response.text();
                         showMessage('Failed to set direction -. ' + err, 'error');
-                    }
+                    } else {
+			dirMinusBtn.className = "btn-green";
+			dirPlusBtn.className = "btn-gray";
+		    }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);

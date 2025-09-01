@@ -21,9 +21,11 @@ if GPIO:
     GPIO.setup(ENABLE_PIN, GPIO.OUT)
     GPIO.setup(DIR_PIN, GPIO.OUT)
     GPIO.setup(STEP_PIN, GPIO.OUT)
-    pwm = GPIO.PWM(STEP_PIN, PWM_FREQ)
-    pwm_started = False
+    #pwm = GPIO.PWM(STEP_PIN, PWM_FREQ)
+    #pwm_started = False
 
+    GPIO.output(DIR_PIN, GPIO.HIGH)  # type: ignore
+    
     def enable_motor():
         GPIO.output(ENABLE_PIN, GPIO.LOW)  # type: ignore
 
@@ -35,26 +37,22 @@ if GPIO:
 
     def do_steps(steps, step_delay=0.002):
         with motor_lock:
-            enable_motor()
             for _ in range(abs(steps)):
                 GPIO.output(STEP_PIN, GPIO.HIGH)  # type: ignore
                 time.sleep(step_delay / 2)
                 GPIO.output(STEP_PIN, GPIO.LOW)  # type: ignore
                 time.sleep(step_delay / 2)
-            disable_motor()
 
-    def do_steps_pwm(steps, frequency=500):
-        global pwm_started
-        with motor_lock:
-            enable_motor()
-            set_direction(steps > 0)
-            if not pwm_started:
-                pwm.start(50)
-                pwm_started = True
-            time.sleep(abs(steps) / frequency)
-            pwm.stop()
-            pwm_started = False
-            disable_motor()
+#    def do_steps_pwm(steps, frequency=500):
+#        global pwm_started
+#        with motor_lock:
+#            set_direction(steps > 0)
+#            if not pwm_started:
+#                pwm.start(50)
+#                pwm_started = True
+#            time.sleep(abs(steps) / frequency)
+#            pwm.stop()
+#            pwm_started = False
 
     def cleanup():
         GPIO.cleanup()
@@ -76,9 +74,9 @@ else:
         print(f"[MOCK] do_steps({steps}, {step_delay}) called")
         time.sleep(abs(steps) * step_delay)
 
-    def do_steps_pwm(steps, frequency=500):
-        print(f"[MOCK] do_steps_pwm({steps}, {frequency}) called")
-        time.sleep(abs(steps) / frequency)
+#    def do_steps_pwm(steps, frequency=500):
+#        print(f"[MOCK] do_steps_pwm({steps}, {frequency}) called")
+#        time.sleep(abs(steps) / frequency)
 
     def cleanup():
         print("[MOCK] cleanup() called")

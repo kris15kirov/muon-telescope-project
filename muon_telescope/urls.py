@@ -72,7 +72,7 @@ urlpatterns = [
         name="api_set_step_period",
     ),
     path("api/do_steps/", control_views.api_do_steps, name="api_do_steps"),
-    path("api/do_steps_pwm/", control_views.api_do_steps_pwm, name="api_do_steps_pwm"),
+#    path("api/do_steps_pwm/", control_views.api_do_steps_pwm, name="api_do_steps_pwm"),
     path("api/quit_motor/", control_views.api_quit_motor, name="api_quit_motor"),
     path("api/pause_motor/", control_views.api_pause_motor, name="api_pause_motor"),
     path("api/resume_motor/", control_views.api_resume_motor, name="api_resume_motor"),

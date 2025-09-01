@@ -61,8 +61,8 @@ except ImportError as e:
     MOTOR_CONTROL_AVAILABLE = False
 
 # Motor parameters
-STEPS_PER_REVOLUTION = 200
-MICROSTEPS = 16
+STEPS_PER_REVOLUTION = 3200
+MICROSTEPS = 1
 TOTAL_STEPS_PER_REV = STEPS_PER_REVOLUTION * MICROSTEPS
 
 # Global motor state
@@ -208,7 +208,6 @@ def api_stop_motor(request):
     """Stop motor movement."""
     try:
         motor_state["is_moving"] = False
-        disable_motor()
 
         log_movement("stop", {"position": motor_state["current_position"]})
 
@@ -376,7 +375,7 @@ def api_shutdown(request):
 
         log_movement("shutdown", {})
         # Use '+5' for 5 minutes delay; 'now' for immediate shutdown
-        subprocess.run(["sudo", "shutdown", "-h", "+5"], check=True)
+        # subprocess.run(["sudo", "shutdown", "-h", "+5"], check=True)
         return JsonResponse(
             {
                 "status": "success",
@@ -438,59 +437,59 @@ def api_do_steps(request):
         return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
 
-@csrf_exempt
-@require_http_methods(["POST"])
-def api_do_steps_pwm(request):
-    """Perform a specific number of steps using PWM for smooth stepping."""
-    try:
-        data = json.loads(request.body)
-        steps = data.get("steps", 0)
-        frequency = data.get("frequency", 500)  # Default 500 Hz
-        if steps == 0:
-            return JsonResponse(
-                {"status": "error", "message": "Steps must be non-zero"}, status=400
-            )
-
-        # Limit steps to prevent long blocking operations
-        max_steps = 100  # Maximum steps to prevent timeouts
-        if abs(steps) > max_steps:
-            return JsonResponse(
-                {
-                    "status": "error",
-                    "message": f"Steps limited to {max_steps} to prevent timeouts",
-                },
-                status=400,
-            )
-
-        # Set direction
-        set_direction(steps > 0)
-        # Move motor using PWM
-        motor_state["is_moving"] = True
-        if MOTOR_CONTROL_AVAILABLE:
-            from muon_telescope.motor_control import do_steps_pwm
-
-            do_steps_pwm(abs(steps), frequency)
-        motor_state["is_moving"] = False
-        # Update position (approximate)
-        position_change = (steps / TOTAL_STEPS_PER_REV) * 360
-        motor_state["current_position"] += position_change
-        log_movement(
-            "do_steps_pwm",
-            {
-                "steps": steps,
-                "frequency": frequency,
-                "position_change": position_change,
-            },
-        )
-        return JsonResponse(
-            {
-                "status": "success",
-                "message": f"Completed {steps} steps with PWM",
-                "position": motor_state["current_position"],
-            }
-        )
-    except Exception as e:
-        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+#@csrf_exempt
+#@require_http_methods(["POST"])
+#def api_do_steps_pwm(request):
+#    """Perform a specific number of steps using PWM for smooth stepping."""
+#    try:
+#        data = json.loads(request.body)
+#        steps = data.get("steps", 0)
+#        frequency = data.get("frequency", 500)  # Default 500 Hz
+#        if steps == 0:
+#            return JsonResponse(
+#                {"status": "error", "message": "Steps must be non-zero"}, status=400
+#            )
+#
+#        # Limit steps to prevent long blocking operations
+#        max_steps = 100  # Maximum steps to prevent timeouts
+#        if abs(steps) > max_steps:
+#            return JsonResponse(
+#                {
+#                    "status": "error",
+#                    "message": f"Steps limited to {max_steps} to prevent timeouts",
+#                },
+#                status=400,
+#            )
+#
+#        # Set direction
+#        set_direction(steps > 0)
+#        # Move motor using PWM
+#        motor_state["is_moving"] = True
+#        if MOTOR_CONTROL_AVAILABLE:
+#            from muon_telescope.motor_control import do_steps_pwm
+#
+#            do_steps_pwm(abs(steps), frequency)
+#        motor_state["is_moving"] = False
+#        # Update position (approximate)
+#        position_change = (steps / TOTAL_STEPS_PER_REV) * 360
+#        motor_state["current_position"] += position_change
+#        log_movement(
+#            "do_steps_pwm",
+#            {
+#                "steps": steps,
+#                "frequency": frequency,
+#                "position_change": position_change,
+#            },
+#        )
+#        return JsonResponse(
+#            {
+#                "status": "success",
+#                "message": f"Completed {steps} steps with PWM",
+#                "position": motor_state["current_position"],
+#            }
+#        )
+#    except Exception as e:
+#        return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
 
 @require_http_methods(["GET"])
@@ -541,13 +540,11 @@ def api_resume_motor(request):
 
 def threaded_do_steps(steps, step_delay=0.002):
     with motor_lock:
-        enable_motor()
         for _ in range(abs(steps)):
             while not motor_pause_event.is_set():
                 time.sleep(0.1)  # Wait while paused
             # Use do_steps for actual stepping, which handles GPIO or mock
             do_steps(1, step_delay)
-        disable_motor()
 
 
 # To use in an endpoint:
