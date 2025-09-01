@@ -25,7 +25,7 @@ if GPIO:
     # pwm_started = False
 
     GPIO.output(DIR_PIN, GPIO.HIGH)  # type: ignore
-    
+
     def enable_motor():
         GPIO.output(ENABLE_PIN, GPIO.LOW)  # type: ignore
 
