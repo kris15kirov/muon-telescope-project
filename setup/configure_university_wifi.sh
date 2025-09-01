@@ -91,8 +91,8 @@ configure_static_ip() {
     echo "Do you want to configure a static IP? (y/n)"
     read -r response
     if [[ "$response" =~ ^[Yy]$ ]]; then
-        read -p "Static IP address (e.g., 10.0.0.100): " STATIC_IP
-        read -p "Gateway (e.g., 10.0.0.1): " GATEWAY
+        read -p "Static IP address (e.g., 62.44.98.100): " STATIC_IP
+        read -p "Gateway (e.g., 62.44.98.3): " GATEWAY
         read -p "DNS servers (e.g., 8.8.8.8,8.8.4.4): " DNS_SERVERS
         
         # Configure dhcpcd for static IP

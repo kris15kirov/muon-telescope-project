@@ -8,6 +8,14 @@ This guide helps you configure your Raspberry Pi-based muon telescope to work on
 - University WiFi credentials (SSID and password)
 - Physical access to the Pi (via HDMI/monitor or SSH)
 
+## 🌐 University Network Information
+
+**Network Details:**
+- **IP Address:** 62.44.98.153
+- **Router/Gateway:** 62.44.98.3
+- **Network Range:** 62.44.98.x
+- **Subnet:** 255.255.255.0 (likely)
+
 ## 🚀 Quick Setup
 
 ### Step 1: Connect to the Pi
@@ -19,7 +27,7 @@ This guide helps you configure your Raspberry Pi-based muon telescope to work on
 
 **Option B: SSH Connection**
 ```bash
-ssh pi@[PI_IP]  # Use current IP from terminal
+ssh pi@[PI_IP]  # Use current IP from terminal (likely 62.44.98.x)
 ```
 
 ### Step 2: Run University WiFi Configuration
@@ -105,7 +113,7 @@ After successful configuration:
 - **Login**: `admin` / `admin`
 - **API Health**: `https://[NEW_IP]/api/health/`
 
-Replace `[NEW_IP]` with the actual IP address assigned by the university network.
+Replace `[NEW_IP]` with the actual IP address assigned by the university network (likely in range 62.44.98.x).
 
 ## 🔍 Troubleshooting
 
