@@ -72,7 +72,7 @@ def do_steps(steps, step_delay=0.002):
             time.sleep(step_delay / 2)
 
 
-#def do_steps_pwm(steps, frequency=500):
+# def do_steps_pwm(steps, frequency=500):
 #    global pwm_started
 #    with motor_lock:
 #        try:

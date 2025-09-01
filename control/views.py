@@ -437,9 +437,9 @@ def api_do_steps(request):
         return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
 
-#@csrf_exempt
-#@require_http_methods(["POST"])
-#def api_do_steps_pwm(request):
+# @csrf_exempt
+# @require_http_methods(["POST"])
+# def api_do_steps_pwm(request):
 #    """Perform a specific number of steps using PWM for smooth stepping."""
 #    try:
 #        data = json.loads(request.body)
