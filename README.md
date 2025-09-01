@@ -51,10 +51,10 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 
 | Raspberry Pi | DM556 Driver | Description |
 |--------------|--------------|-------------|
-| GPIO 17      | EN+          | Enable (active low) |
-| GPIO 18      | DIR+         | Direction control |
-| GPIO 27      | PUL+         | Step pulse |
-| GND          | GND          | Common ground |
+| GPIO 17 (Pin 11) | EN+          | Enable (active low) |
+| GPIO 27 (Pin 13) | DIR+         | Direction control |
+| GPIO 22 (Pin 15) | PUL+         | Step pulse |
+| GND (Pin 6,30,34) | GND          | Common ground |
 | 5V/3.3V      | VCC          | Power supply |
 
 ### Wiring Diagram
@@ -62,9 +62,13 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 Raspberry Pi 3B+
 ┌─────────────┐
 │ GPIO 17 ────┼──► EN+  DM556
-│ GPIO 18 ────┼──► DIR+ Driver
-│ GPIO 27 ────┼──► PUL+
+│ (Pin 11)    │    Driver
+│ GPIO 27 ────┼──► DIR+
+│ (Pin 13)    │
+│ GPIO 22 ────┼──► PUL+
+│ (Pin 15)    │
 │ GND ────────┼──► GND
+│ (Pin 6,30,34)│
 │ 5V ─────────┼──► VCC
 └─────────────┘
 ```

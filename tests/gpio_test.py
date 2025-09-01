@@ -4,10 +4,10 @@ GPIO Test Script for Muon Telescope Stepper Motor Control
 Tests DM556 stepper motor driver via RPi.GPIO
 
 Hardware Setup:
-- GPIO 17: Enable (EN+)
-- GPIO 18: Direction (DIR+)
-- GPIO 27: Step (PUL+)
-- GND: Common ground for all signals
+- GPIO 17 (Pin 11): Enable (EN+)
+- GPIO 27 (Pin 13): Direction (DIR+)
+- GPIO 22 (Pin 15): Step (PUL+)
+- GND (Pin 6,30,34): Common ground for all signals
 """
 
 import RPi.GPIO as GPIO
@@ -16,8 +16,8 @@ import sys
 
 # GPIO Pin Definitions
 ENABLE_PIN = 17  # Enable pin (active low)
-DIR_PIN = 18  # Direction pin
-STEP_PIN = 27  # Step pin
+DIR_PIN = 27  # Direction pin
+STEP_PIN = 22  # Step pin
 PULSE_WIDTH = 0.001  # Pulse width in seconds (1ms)
 
 # Motor parameters

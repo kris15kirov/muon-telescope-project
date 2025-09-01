@@ -12,10 +12,10 @@ except (ImportError, RuntimeError):
     GPIO = None
 
 if GPIO:
-    ENABLE_PIN = 17
-    DIR_PIN = 18
-    STEP_PIN = 27
-    PWM_FREQ = 500
+    ENABLE_PIN = 17  # Enable pin (active low) - Pin 11
+    DIR_PIN = 27  # Direction pin - Pin 13
+    STEP_PIN = 22  # Step pin - Pin 15
+    PWM_FREQ = 500  # Hz
     motor_lock = threading.Lock()
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(ENABLE_PIN, GPIO.OUT)
