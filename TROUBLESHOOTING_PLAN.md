@@ -88,16 +88,16 @@ sudo tail -f /var/log/nginx/access.log
 #### 3.1 Comprehensive Endpoint Test
 ```bash
 # Test all GET endpoints
-curl -k https://192.168.100.36/api/health/
-curl -k https://192.168.100.36/api/status/
-curl -k https://192.168.100.36/api/logs/
+curl -k https://[PI_IP]/api/health/
+curl -k https://[PI_IP]/api/status/
+curl -k https://[PI_IP]/api/logs/
 
 # Test all POST endpoints
-curl -k -X POST -H "Content-Type: application/json" -d '{"direction": "forward", "steps": 10}' https://192.168.100.36/api/motor/move/
-curl -k -X POST https://192.168.100.36/api/motor/stop/
-curl -k -X POST -H "Content-Type: application/json" -d '{"position": 0}' https://192.168.100.36/api/set_zero_position/
-curl -k -X POST https://192.168.100.36/api/pause_motor/
-curl -k -X POST https://192.168.100.36/api/resume_motor/
+curl -k -X POST -H "Content-Type: application/json" -d '{"direction": "forward", "steps": 10}' https://[PI_IP]/api/motor/move/
+curl -k -X POST https://[PI_IP]/api/motor/stop/
+curl -k -X POST -H "Content-Type: application/json" -d '{"position": 0}' https://[PI_IP]/api/set_zero_position/
+curl -k -X POST https://[PI_IP]/api/pause_motor/
+curl -k -X POST https://[PI_IP]/api/resume_motor/
 ```
 
 ### Phase 4: Prevention Measures

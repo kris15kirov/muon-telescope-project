@@ -24,14 +24,14 @@ sudo tee /etc/nginx/sites-available/muon-telescope > /dev/null <<'EOF'
 # HTTP to HTTPS redirect
 server {
     listen 80;
-    server_name 192.168.100.36;
-    return 301 https://$server_name$request_uri;
+    server_name _;
+    return 301 https://$host$request_uri;
 }
 
 # HTTPS server
 server {
     listen 443 ssl http2;
-    server_name 192.168.100.36;
+    server_name _;
 
     # SSL configuration
     ssl_certificate /etc/ssl/muon-telescope/muon-telescope.crt;
@@ -99,5 +99,5 @@ sudo systemctl start nginx
 sudo systemctl enable nginx
 
 echo "✅ Nginx installed and configured successfully!"
-echo "🌐 Access your application at: https://192.168.100.36"
+echo "🌐 Access your application at: https://[PI_IP]"
 echo "⚠️  Note: You'll see a browser warning for self-signed certificate - this is normal for development" 

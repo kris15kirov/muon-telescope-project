@@ -3,7 +3,7 @@
 # Comprehensive endpoint testing script
 # Tests all GET and POST endpoints for the Muon Telescope API
 
-BASE_URL="https://192.168.100.36"
+BASE_URL="https://[PI_IP]"
 LOG_FILE="/tmp/endpoint-test.log"
 
 echo "=== Muon Telescope API Endpoint Test ===" | tee "$LOG_FILE"

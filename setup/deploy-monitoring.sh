@@ -6,22 +6,24 @@
 echo "=== Deploying Monitoring and Recovery Tools ==="
 
 # Check if Pi is reachable
-if ! ping -c 1 192.168.100.36 > /dev/null 2>&1; then
-    echo "❌ Raspberry Pi is not reachable"
+PI_IP=${1:-"192.168.100.36"}  # Default IP, can be overridden
+if ! ping -c 1 $PI_IP > /dev/null 2>&1; then
+    echo "❌ Raspberry Pi is not reachable at $PI_IP"
     echo "Please ensure the Pi is powered on and connected to the network"
+    echo "Usage: $0 [PI_IP_ADDRESS]"
     exit 1
 fi
 
-echo "✅ Pi is reachable, deploying tools..."
+echo "✅ Pi is reachable at $PI_IP, deploying tools..."
 
 # Copy monitoring scripts to Pi
 echo "📁 Copying monitoring scripts..."
-scp setup/monitor-power.sh pi@192.168.100.36:/tmp/
-scp setup/auto-recovery.sh pi@192.168.100.36:/tmp/
-scp setup/test-all-endpoints.sh pi@192.168.100.36:/tmp/
+scp setup/monitor-power.sh pi@$PI_IP:/tmp/
+scp setup/auto-recovery.sh pi@$PI_IP:/tmp/
+scp setup/test-all-endpoints.sh pi@$PI_IP:/tmp/
 
 # Execute setup commands on Pi
-ssh pi@192.168.100.36 << 'EOF'
+ssh pi@$PI_IP << 'EOF'
     echo "🔧 Setting up monitoring tools..."
     
     # Make scripts executable
@@ -92,6 +94,6 @@ echo "🚀 Monitoring deployment complete!"
 echo ""
 echo "📋 Next steps:"
 echo "1. Wait for Pi to stabilize"
-echo "2. Run: ssh pi@192.168.100.36 'sudo /usr/local/bin/test-all-endpoints.sh'"
-echo "3. Check logs: ssh pi@192.168.100.36 'tail -f /var/log/muon-power.log'"
-echo "4. Monitor recovery: ssh pi@192.168.100.36 'tail -f /var/log/muon-recovery.log'" 
+echo "2. Run: ssh pi@$PI_IP 'sudo /usr/local/bin/test-all-endpoints.sh'"
+echo "3. Check logs: ssh pi@$PI_IP 'tail -f /var/log/muon-power.log'"
+echo "4. Monitor recovery: ssh pi@$PI_IP 'tail -f /var/log/muon-recovery.log'" 

@@ -8,7 +8,7 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 - **Authentication**: Secure login system with session management
 - **Motor Control**: Precise stepper motor control via DM556 driver
 - **Real-time Updates**: Live status updates and movement logging
-- **Network Access**: Works on home network for easy access
+- **Network Access**: Works on university network for easy access
 - **Database Logging**: Tracks all motor movements and user actions
 
 ## 🏗️ Architecture
@@ -115,22 +115,11 @@ python3 tests/gpio_test.py
 ```
 
 ### Step 7: Configure Network Access
-Choose your deployment option:
 
-**Option A: Multi-Network (Recommended)**
-- Works with both home and university WiFi
-- Automatic network switching with priority
-- Run: `sudo ./setup/configure_multi_network.sh`
-- Follow: `MULTI_NETWORK_SETUP.md`
-- **Quick switching**: Use `NETWORK_SWITCHING_GUIDE.md`
-
-**Option B: Home Network Only**
-- Connect Pi to your home WiFi
-- Access via: `https://[PI_IP]/control/`
-
-**Option C: University Network Only**
-- Follow instructions in `UNIVERSITY_SETUP.md`
+**University WiFi Setup (Recommended):**
+- Connect Pi to university WiFi network
 - Run: `sudo ./setup/configure_university_wifi.sh`
+- Follow: `UNIVERSITY_SETUP.md`
 
 ### Step 8: Start the Application
 ```bash
@@ -145,15 +134,9 @@ sudo systemctl start muon-telescope-dev.service
 
 ### Connecting to the System
 
-**Multi-Network Setup (Recommended):**
-1. **Configure both networks** using the setup script
-2. **Pi automatically switches** between home and university WiFi
-3. **Access from either network**: `https://[PI_IP]/control/`
-4. **Login**: Use the admin account you created
-
-**Single Network Setup:**
-1. **Connect to the appropriate WiFi** (home or university)
-2. **Access Web Interface**: `https://[PI_IP]/control/`
+**University WiFi Setup:**
+1. **Connect Pi to university WiFi** using the setup script
+2. **Access from university network**: `https://[PI_IP]/control/`
 3. **Login**: Use the admin account you created
 
 **Find Pi IP Address:**
@@ -189,9 +172,6 @@ muon-telescope-project/
 ├── frontend/                # Additional static assets
 │   └── static/
 ├── setup/                   # Setup scripts
-│   ├── configure_multi_network.sh    # Multi-network setup
-│   ├── switch_to_university.sh       # Switch to university-only mode
-│   ├── switch_to_multi_network.sh    # Switch to multi-network mode
 │   ├── configure_university_wifi.sh  # University WiFi setup
 │   ├── check_network_status.sh       # Network diagnostics
 │   └── install_nginx.sh              # Web server setup
