@@ -47,6 +47,12 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 
 ## 🔧 Hardware Setup
 
+**Power Requirements:**
+- **Raspberry Pi:** 5V/3A via micro USB
+- **DM556 Logic:** 3.3V from Pi (Pin 1 or 17)
+- **Motor Power:** 24-48V external power supply
+- **Ground:** Multiple GND connections (Pin 6, 30, 34)
+
 ### GPIO Connections
 
 | Raspberry Pi | DM556 Driver | Description |
@@ -54,23 +60,29 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 | GPIO 17 (Pin 11) | EN+          | Enable (active low) |
 | GPIO 27 (Pin 13) | DIR+         | Direction control |
 | GPIO 22 (Pin 15) | PUL+         | Step pulse |
+| 3.3V (Pin 1/17) | VCC          | Logic power supply |
 | GND (Pin 6,30,34) | GND          | Common ground |
-| 5V/3.3V      | VCC          | Power supply |
+| External 24-48V | Motor Power | Motor power supply |
 
 ### Wiring Diagram
 ```
-Raspberry Pi 3B+
-┌─────────────┐
-│ GPIO 17 ────┼──► EN+  DM556
-│ (Pin 11)    │    Driver
-│ GPIO 27 ────┼──► DIR+
-│ (Pin 13)    │
-│ GPIO 22 ────┼──► PUL+
-│ (Pin 15)    │
-│ GND ────────┼──► GND
-│ (Pin 6,30,34)│
-│ 5V ─────────┼──► VCC
-└─────────────┘
+Raspberry Pi 3B+    DM556 Driver
+┌─────────────┐     ┌─────────────┐
+│ GPIO 17 ────┼────►│ EN+         │ (Enable - Pin 11)
+│ (Pin 11)    │     │             │
+│ GPIO 27 ────┼────►│ DIR+        │ (Direction - Pin 13)
+│ (Pin 13)    │     │             │
+│ GPIO 22 ────┼────►│ PUL+        │ (Step - Pin 15)
+│ (Pin 15)    │     │             │
+│ 3.3V ───────┼────►│ VCC         │ (Logic power - Pin 1 or 17)
+│ (Pin 1/17)  │     │             │
+│ GND ────────┼────►│ GND         │ (Ground - Pin 6,30,34)
+│ (Pin 6,30,34)│    │             │
+└─────────────┘     └─────────────┘
+                    │             │
+                    │ 24-48V ─────┼──► Motor Power (External)
+                    │ (External)  │
+                    └─────────────┘
 ```
 
 ## Installation
