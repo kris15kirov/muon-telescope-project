@@ -83,7 +83,7 @@ class MotorController {
                     if (response.ok) {
 			gotoAngleBtn.className = 'btn-green';
 		    	gotoAngleBtn.disabled = false;
-
+                	this.updateMotorStatus();
                     } else {
                         const err = await response.text();
                         showMessage('Failed to move to angle. ' + err, 'error');
@@ -260,7 +260,9 @@ class MotorController {
                     if (!response.ok) {
                         const err = await response.text();
                         showMessage('Failed to do steps. ' + err, 'error');
-                    }
+                    } else {
+                	this.updateMotorStatus();
+		    }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
@@ -461,9 +463,9 @@ class MotorController {
             const data = await response.json();
 
             if (response.ok) {
-                this.updateStatusDisplay(data.motor);
+		// this.updateStatusDisplay(data.motor);
                 // Support both top-level and nested 'motor' keys for metrics
-                const metrics = data.motor || data;
+                const metrics = data;
                 if (metrics.angle !== undefined) {
                     const angleEl = document.getElementById('m-angle');
                     if (angleEl) angleEl.textContent = metrics.angle + ' °';
