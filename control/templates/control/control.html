@@ -77,7 +77,8 @@
             display: flex;
             justify-content: space-between;
             width: 100%;
-            font-size: 0.9em;
+	    font-family: monospace;
+            font-size: 0.85rem;
             color: #555;
         }
 
@@ -129,16 +130,15 @@
         </div>
         <div class="centered-group">
             <button class="btn-red" id="set-zero-btn">Set Zero Position</button>
-            <input type="number" id="zero-pos" placeholder="Zero Position" value="0">
         </div>
         <div class="go-to-angle-panel">
-            <input type="range" min="-75" max="75" value="0" id="angle-slider" style="width:100%;" disabled="true">
-            <div class="slider-labels">
-                <span>-75</span><span>-60</span><span>-45</span><span>-30</span><span>-15</span><span>0</span><span>15</span><span>30</span><span>45</span><span>60</span><span>75</span>
-            </div>
             <div style="text-align:center;margin:8px 0;">
                 <span id="angle-value">0</span>
             </div>
+            <div class="slider-labels">
+                <span>-75</span><span>-60</span><span>-45</span><span>-30</span><span>-15</span><span>0</span><span>+15</span><span>+30</span><span>+45</span><span>+60</span><span>+75</span>
+            </div>
+            <input type="range" min="-75" max="75" value="0" id="angle-slider" style="width:100%;" disabled="true">
             <div style="display: flex; justify-content: center;" disabled="true">
                 <button class="btn-gray" id="goto-angle-btn">Go to Angle</button>
             </div>
