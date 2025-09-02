@@ -328,32 +328,38 @@ class MotorController {
         //     // Set initial state
         //     setStepperControlState(pwmToggle.checked);
         // }
-        // Quit Motor button (admin only)
-        const quitMotorBtn = document.getElementById('disable-motor-btn');
-        if (quitMotorBtn) {
-            quitMotorBtn.onclick = async function () {
-                if (confirm('Are you sure you want to disable the motor?')) {
-                    await fetch('/api/quit_motor/', { method: 'POST' });
-                    showMessage('Motor disabled.');
-                }
-            };
-        }
-        // Pause Motor button (admin only)
-        const pauseMotorBtn = document.getElementById('pause-motor-btn');
-        if (pauseMotorBtn) {
-            pauseMotorBtn.onclick = async function () {
-                await fetch('/api/pause_motor/', { method: 'POST' });
-                showMessage('Motor paused.');
-            };
-        }
-        // Resume Motor button (admin only)
-        const resumeMotorBtn = document.getElementById('resume-motor-btn');
-        if (resumeMotorBtn) {
-            resumeMotorBtn.onclick = async function () {
-                await fetch('/api/resume_motor/', { method: 'POST' });
-                showMessage('Motor resumed.');
-            };
-        }
+        // QUIT MOTOR BUTTON COMMENTED OUT - NOT NEEDED AT THIS POINT OF THE PROJECT
+        // Button is not present in the HTML template
+        // // Quit Motor button (admin only)
+        // const quitMotorBtn = document.getElementById('disable-motor-btn');
+        // if (quitMotorBtn) {
+        //     quitMotorBtn.onclick = async function () {
+        //         if (confirm('Are you sure you want to disable the motor?')) {
+        //             await fetch('/api/quit_motor/', { method: 'POST' });
+        //             showMessage('Motor disabled.');
+        //         }
+        //     };
+        // }
+        // PAUSE MOTOR BUTTON COMMENTED OUT - NOT NEEDED AT THIS POINT OF THE PROJECT
+        // Button is not present in the HTML template
+        // // Pause Motor button (admin only)
+        // const pauseMotorBtn = document.getElementById('pause-motor-btn');
+        // if (pauseMotorBtn) {
+        //     pauseMotorBtn.onclick = async function () {
+        //         await fetch('/api/pause_motor/', { method: 'POST' });
+        //         showMessage('Motor paused.');
+        //     };
+        // }
+        // RESUME MOTOR BUTTON COMMENTED OUT - NOT NEEDED AT THIS POINT OF THE PROJECT
+        // Button is not present in the HTML template
+        // // Resume Motor button (admin only)
+        // const resumeMotorBtn = document.getElementById('resume-motor-btn');
+        // if (resumeMotorBtn) {
+        //     resumeMotorBtn.onclick = async function () {
+        //         await fetch('/api/resume_motor/', { method: 'POST' });
+        //         showMessage('Motor resumed.');
+        //     };
+        // }
     }
 
     async handleMoveMotor(e) {
