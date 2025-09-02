@@ -10,7 +10,7 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 - **Real-time Updates**: Live status updates (Angle, Counts per Second)
 - **Advanced Controls**: Step frequency control, manual stepping, direction control
 - **Network Access**: Works on university network for easy access
-- **Database Logging**: Tracks all motor movements and user actions
+- **Movement Logging**: Tracks motor movements in memory (last 100 actions)
 
 ## 🏗️ Architecture
 
@@ -186,9 +186,9 @@ Edit `muon_telescope/motor_control.py`:
 ## 🌍 Environment & Configuration
 
 - **Environment Variables**: Store sensitive data in `.env` file
-- **Database**: SQLite3 for simplicity (can be upgraded to PostgreSQL)
+- **Database**: SQLite3 for user authentication and sessions
 - **Static Files**: Served via Django/WhiteNoise
-- **Logging**: Comprehensive movement and error logging
+- **Logging**: In-memory movement logging (non-persistent)
 - **Security**: Password hashing, session management, role-based access
 
 ---
