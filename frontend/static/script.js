@@ -6,10 +6,10 @@ function logError(...args) {
 
 function showMessage(level, msg) {
     const m = document.createElement('div');
-//    m.classList.add('flash', level);
-//    m.textContent = msg;
-//    document.body.appendChild(m);
-//    setTimeout(() => m.remove(), 4000);
+    //    m.classList.add('flash', level);
+    //    m.textContent = msg;
+    //    document.body.appendChild(m);
+    //    setTimeout(() => m.remove(), 4000);
 }
 
 class MotorController {
@@ -46,20 +46,20 @@ class MotorController {
 
         // Set Zero Position button
         const setZeroBtn = document.getElementById('set-zero-btn');
-	const AngleSlider = document.getElementById('angle-slider');
+        const AngleSlider = document.getElementById('angle-slider');
         // Go to Angle button
         const gotoAngleBtn = document.getElementById('goto-angle-btn');
-	    if (setZeroBtn&&AngleSlider&&gotoAngleBtn) {
+        if (setZeroBtn && AngleSlider && gotoAngleBtn) {
             setZeroBtn.onclick = async function () {
-                    const response = await fetch('/api/set_zero_position/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: {}
-                    });
-            setZeroBtn.className = "btn-green";
-	    AngleSlider.disabled = false;
-	    gotoAngleBtn.className = "btn-green";
-	    gotoAngleBtn.disabled = false;
+                const response = await fetch('/api/set_zero_position/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: {}
+                });
+                setZeroBtn.className = "btn-green";
+                AngleSlider.disabled = false;
+                gotoAngleBtn.className = "btn-green";
+                gotoAngleBtn.disabled = false;
             };
         }
 
@@ -67,9 +67,9 @@ class MotorController {
         if (gotoAngleBtn) {
             gotoAngleBtn.onclick = async function () {
                 try {
-		    
-		    gotoAngleBtn.className = 'btn-red';
-		    gotoAngleBtn.disabled = true;
+
+                    gotoAngleBtn.className = 'btn-red';
+                    gotoAngleBtn.disabled = true;
                     const angle = parseFloat(document.getElementById('angle-slider').value);
                     if (isNaN(angle)) {
                         showMessage('Please select a valid angle.', 'error');
@@ -81,9 +81,9 @@ class MotorController {
                         body: JSON.stringify({ angle: angle })
                     });
                     if (response.ok) {
-			gotoAngleBtn.className = 'btn-green';
-		    	gotoAngleBtn.disabled = false;
-
+                        gotoAngleBtn.className = 'btn-green';
+                        gotoAngleBtn.disabled = false;
+                        this.updateMotorStatus();
                     } else {
                         const err = await response.text();
                         showMessage('Failed to move to angle. ' + err, 'error');
@@ -130,7 +130,7 @@ class MotorController {
         // Advanced controls (admin only)
         const enableStepperBtn = document.getElementById('enable-stepper-btn');
         const disableStepperBtn = document.getElementById('disable-stepper-btn');
-	if (enableStepperBtn && disableStepperBtn) {
+        if (enableStepperBtn && disableStepperBtn) {
             enableStepperBtn.onclick = async function () {
                 try {
                     const response = await fetch('/api/enable_stepper/', {
@@ -142,18 +142,18 @@ class MotorController {
                         const err = await response.text();
                         showMessage('Failed to enable stepper. ' + err, 'error');
                     } else {
-		    	enableStepperBtn.className = "btn-green";
-			disableStepperBtn.className = "btn-gray";
-		    }
+                        enableStepperBtn.className = "btn-green";
+                        disableStepperBtn.className = "btn-gray";
+                    }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
                 }
             };
-            
-          disableStepperBtn.onclick = async function () {
+
+            disableStepperBtn.onclick = async function () {
                 try {
-			
+
                     const response = await fetch('/api/disable_stepper/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -163,14 +163,14 @@ class MotorController {
                         const err = await response.text();
                         showMessage('Failed to disable stepper. ' + err, 'error');
                     } else {
-			    enableStepperBtn.className = "btn-gray";
-			    disableStepperBtn.className = "btn-red";
-			    setZeroBtn.className = "btn-green";
-			    AngleSlider.disabled = true;
-			    gotoBtn.className = "btn-red";
-			    gotoBtn.disabled = true;
-		    }
-              } catch (e) {
+                        enableStepperBtn.className = "btn-gray";
+                        disableStepperBtn.className = "btn-red";
+                        setZeroBtn.className = "btn-green";
+                        AngleSlider.disabled = true;
+                        gotoBtn.className = "btn-red";
+                        gotoBtn.disabled = true;
+                    }
+                } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
                 }
@@ -178,7 +178,7 @@ class MotorController {
         }
         const dirPlusBtn = document.getElementById('dir-plus-btn');
         const dirMinusBtn = document.getElementById('dir-minus-btn');
-        if (dirPlusBtn&&dirMinusBtn) {
+        if (dirPlusBtn && dirMinusBtn) {
             dirPlusBtn.onclick = async function () {
                 try {
                     const response = await fetch('/api/set_direction/', {
@@ -190,15 +190,15 @@ class MotorController {
                         const err = await response.text();
                         showMessage('Failed to set direction +. ' + err, 'error');
                     } else {
-			dirPlusBtn.className = "btn-green";
-			dirMinusBtn.className = "btn-gray";
-		    }
+                        dirPlusBtn.className = "btn-green";
+                        dirMinusBtn.className = "btn-gray";
+                    }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
                 }
             };
-        
+
             dirMinusBtn.onclick = async function () {
                 try {
                     const response = await fetch('/api/set_direction/', {
@@ -210,9 +210,9 @@ class MotorController {
                         const err = await response.text();
                         showMessage('Failed to set direction -. ' + err, 'error');
                     } else {
-			dirMinusBtn.className = "btn-green";
-			dirPlusBtn.className = "btn-gray";
-		    }
+                        dirMinusBtn.className = "btn-green";
+                        dirPlusBtn.className = "btn-gray";
+                    }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
                     logError(e);
@@ -260,6 +260,8 @@ class MotorController {
                     if (!response.ok) {
                         const err = await response.text();
                         showMessage('Failed to do steps. ' + err, 'error');
+                    } else {
+                        this.updateMotorStatus();
                     }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
@@ -267,64 +269,65 @@ class MotorController {
                 }
             };
         }
-        const pwmToggle = document.getElementById('pwm-toggle');
-        const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
-        if (doStepsPwmBtn) {
-            doStepsPwmBtn.onclick = async function () {
-                try {
-                    const steps = parseInt(document.getElementById('step-count').value, 10);
-                    const freq = parseInt(document.getElementById('pwm-frequency').value, 10);
-                    if (isNaN(steps)) {
-                        showMessage('Please enter a valid number of steps.', 'error');
-                        return;
-                    }
-                    if (isNaN(freq) || freq < 1) {
-                        showMessage('Please enter a valid PWM frequency.', 'error');
-                        return;
-                    }
-                    const response = await fetch('/api/do_steps_pwm/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ steps: steps, frequency: freq })
-                    });
-                    if (!response.ok) {
-                        const err = await response.text();
-                        showMessage('Failed to do steps (PWM). ' + err, 'error');
-                    }
-                } catch (e) {
-                    showMessage('Network or JS error: ' + e, 'error');
-                    logError(e);
-                }
-            };
-        }
-        if (pwmToggle) {
-            function setStepperControlState(isPwm) {
-                // Manual controls
-                const stepCount = document.getElementById('step-count');
-                const stepPeriod = document.getElementById('step-period');
-                const doStepsBtn = document.getElementById('do-steps-btn');
-                const setStepPeriodBtn = document.getElementById('set-step-period-btn');
-                // PWM controls
-                const pwmFrequency = document.getElementById('pwm-frequency');
-                const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
-                // Helper to set disabled and opacity
-                function setDisabledGroup(elems, disabled) {
-                    elems.forEach(el => {
-                        if (el) {
-                            el.disabled = disabled;
-                            el.style.opacity = disabled ? 0.5 : 1.0;
-                        }
-                    });
-                }
-                setDisabledGroup([stepCount, stepPeriod, doStepsBtn, setStepPeriodBtn], isPwm);
-                setDisabledGroup([pwmFrequency, doStepsPwmBtn], !isPwm);
-            }
-            pwmToggle.addEventListener('change', function () {
-                setStepperControlState(this.checked);
-            });
-            // Set initial state
-            setStepperControlState(pwmToggle.checked);
-        }
+        // PWM FUNCTIONALITY COMMENTED OUT - NOT NEEDED AT THIS POINT OF THE PROJECT
+        // const pwmToggle = document.getElementById('pwm-toggle');
+        // const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
+        // if (doStepsPwmBtn) {
+        //     doStepsPwmBtn.onclick = async function () {
+        //         try {
+        //             const steps = parseInt(document.getElementById('step-count').value, 10);
+        //             const freq = parseInt(document.getElementById('pwm-frequency').value, 10);
+        //             if (isNaN(steps)) {
+        //                 showMessage('Please enter a valid number of steps.', 'error');
+        //                 return;
+        //             }
+        //             if (isNaN(freq) || freq < 1) {
+        //                 showMessage('Please enter a valid PWM frequency.', 'error');
+        //                 return;
+        //             }
+        //             const response = await fetch('/api/do_steps_pwm/', {
+        //                 method: 'POST',
+        //                 headers: { 'Content-Type': 'application/json' },
+        //                 body: JSON.stringify({ steps: steps, frequency: freq })
+        //             });
+        //             if (!response.ok) {
+        //                 const err = await response.text();
+        //                 showMessage('Failed to do steps (PWM). ' + err, 'error');
+        //             }
+        //         } catch (e) {
+        //             showMessage('Network or JS error: ' + e, 'error');
+        //             logError(e);
+        //         }
+        //     };
+        // }
+        // if (pwmToggle) {
+        //     function setStepperControlState(isPwm) {
+        //         // Manual controls
+        //         const stepCount = document.getElementById('step-count');
+        //         const stepPeriod = document.getElementById('step-period');
+        //         const doStepsBtn = document.getElementById('do-steps-btn');
+        //         const setStepPeriodBtn = document.getElementById('set-step-period-btn');
+        //         // PWM controls
+        //         const pwmFrequency = document.getElementById('pwm-frequency');
+        //         const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
+        //         // Helper to set disabled and opacity
+        //         function setDisabledGroup(elems, disabled) {
+        //             elems.forEach(el => {
+        //                 if (el) {
+        //                     el.disabled = disabled;
+        //                     el.style.opacity = disabled ? 0.5 : 1.0;
+        //                     }
+        //                 }
+        //             }
+        //         setDisabledGroup([stepCount, stepPeriod, doStepsBtn, setStepPeriodBtn], isPwm);
+        //         setDisabledGroup([pwmFrequency, doStepsPwmBtn], !isPwm);
+        //     }
+        //     pwmToggle.addEventListener('change', function () {
+        //         setStepperControlState(this.checked);
+        //     });
+        //     // Set initial state
+        //     setStepperControlState(pwmToggle.checked);
+        // }
         // Quit Motor button (admin only)
         const quitMotorBtn = document.getElementById('disable-motor-btn');
         if (quitMotorBtn) {
@@ -461,21 +464,21 @@ class MotorController {
             const data = await response.json();
 
             if (response.ok) {
-                this.updateStatusDisplay(data.motor);
+                // this.updateStatusDisplay(data.motor);
                 // Support both top-level and nested 'motor' keys for metrics
-                const metrics = data.motor || data;
+                const metrics = data;
                 if (metrics.angle !== undefined) {
                     const angleEl = document.getElementById('m-angle');
                     if (angleEl) angleEl.textContent = metrics.angle + ' °';
                 }
                 if (metrics.count_rate !== undefined) {
                     const rateEl = document.getElementById('m-rate');
-                    if (rateEl) rateEl.textContent = metrics.count_rate + ' cpm';
+                    if (rateEl) rateEl.textContent = metrics.count_rate + ' cps';
                 }
-                if (metrics.temperature !== undefined) {
-                    const tempEl = document.getElementById('m-temp');
-                    if (tempEl) tempEl.textContent = metrics.temperature.toFixed(1) + ' °C';
-                }
+                // if (metrics.temperature !== undefined) {
+                //     const tempEl = document.getElementById('m-temp');
+                //     if (tempEl) tempEl.textContent = metrics.temperature.toFixed(1) + ' °C'; // no need at this point of the project
+                // }
                 if (metrics.step_position !== undefined) {
                     const posEl = document.getElementById('m-pos');
                     if (posEl) posEl.textContent = metrics.step_position;
@@ -594,26 +597,26 @@ class MotorController {
     }
 
     showMessage(message, type = 'success') {
-	
-	    //        // Remove existing messages
-//        const existingMessages = document.querySelectorAll('.message');
-//        existingMessages.forEach(msg => msg.remove());
-//
-//        // Create new message
-//        const messageEl = document.createElement('div');
-//        messageEl.className = `message ${type}`;
-//        messageEl.textContent = message;
-//
-//        // Insert at the top of the main content
-//        const mainContent = document.querySelector('.main-content');
-//        if (mainContent) {
-//            mainContent.insertBefore(messageEl, mainContent.firstChild);
-//
-//            // Auto-remove after 5 seconds
-//            setTimeout(() => {
-//                messageEl.remove();
-//            }, 5000);
-//        }
+
+        //        // Remove existing messages
+        //        const existingMessages = document.querySelectorAll('.message');
+        //        existingMessages.forEach(msg => msg.remove());
+        //
+        //        // Create new message
+        //        const messageEl = document.createElement('div');
+        //        messageEl.className = `message ${type}`;
+        //        messageEl.textContent = message;
+        //
+        //        // Insert at the top of the main content
+        //        const mainContent = document.querySelector('.main-content');
+        //        if (mainContent) {
+        //            mainContent.insertBefore(messageEl, mainContent.firstChild);
+        //
+        //            // Auto-remove after 5 seconds
+        //            setTimeout(() => {
+        //                messageEl.remove();
+        //            }, 5000);
+        //        }
     }
 
     destroy() {

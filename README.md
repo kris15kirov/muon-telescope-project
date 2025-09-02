@@ -204,7 +204,6 @@ muon-telescope-project/
 Edit `muon_telescope/motor_control.py` to adjust:
 - `STEPS_PER_REVOLUTION`: Motor steps per revolution (default: 200)
 - `MICROSTEPS`: Driver microstepping (default: 16)
-- `PWM_FREQ`: Step pulse frequency (default: 500 Hz)
 
 ### Network Settings
 The system automatically connects to university WiFi and updates its IP address dynamically.

@@ -442,6 +442,7 @@ def api_do_steps(request):
         return JsonResponse({"status": "error", "message": str(e)}, status=400)
 
 
+# PWM FUNCTIONALITY COMMENTED OUT - NOT NEEDED AT THIS POINT OF THE PROJECT
 # @csrf_exempt
 # @require_http_methods(["POST"])
 # def api_do_steps_pwm(request):

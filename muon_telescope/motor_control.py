@@ -25,18 +25,19 @@ except (ImportError, RuntimeError):
         def cleanup(self, *a, **kw):
             pass
 
-        class PWM:
-            def __init__(self, *a, **kw):
-                pass
+        # PWM CLASS COMMENTED OUT - NOT NEEDED AT THIS POINT OF THE PROJECT
+        # class PWM:
+        #     def __init__(self, *a, **kw):
+        #         pass
 
-            def start(self, *a, **kw):
-                pass
+        #     def start(self, *a, **kw):
+        #         pass
 
-            def stop(self, *a, **kw):
-                pass
+        #     def stop(self, *a, **kw):
+        #         pass
 
     GPIO = MockGPIO()
-    GPIO.PWM = MockGPIO.PWM
+    # GPIO.PWM = MockGPIO.PWM  # PWM not needed at this point
 
 
 # Global motor state

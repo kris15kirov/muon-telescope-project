@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 ENABLE_PIN = 17  # Enable pin (active low) - Pin 11
 DIR_PIN = 13  # Direction pin - Pin 13
 STEP_PIN = 22  # Step pin - Pin 15
-PWM_FREQ = 500  # Hz
+# PWM_FREQ = 500  # Hz  # PWM not needed at this point
 GPIO.setmode(GPIO.BOARD)
 # GPIO.setup(ENABLE_PIN, GPIO.OUT)
 GPIO.setup(DIR_PIN, GPIO.OUT)
