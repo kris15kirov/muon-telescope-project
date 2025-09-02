@@ -6,10 +6,10 @@ function logError(...args) {
 
 function showMessage(level, msg) {
     const m = document.createElement('div');
-    m.classList.add('flash', level);
-    m.textContent = msg;
-    document.body.appendChild(m);
-    setTimeout(() => m.remove(), 4000);
+//    m.classList.add('flash', level);
+//    m.textContent = msg;
+//    document.body.appendChild(m);
+//    setTimeout(() => m.remove(), 4000);
 }
 
 class MotorController {
@@ -51,6 +51,11 @@ class MotorController {
         const gotoAngleBtn = document.getElementById('goto-angle-btn');
 	    if (setZeroBtn&&AngleSlider&&gotoAngleBtn) {
             setZeroBtn.onclick = async function () {
+                    const response = await fetch('/api/set_zero_position/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: {}
+                    });
             setZeroBtn.className = "btn-green";
 	    AngleSlider.disabled = false;
 	    gotoAngleBtn.className = "btn-green";
@@ -76,8 +81,8 @@ class MotorController {
                         body: JSON.stringify({ angle: angle })
                     });
                     if (response.ok) {
-                        showMessage('Moving to angle...');
-			gotoAngleBtn.className = 'btn-reg';
+			gotoAngleBtn.className = 'btn-green';
+		    	gotoAngleBtn.disabled = false;
 
                     } else {
                         const err = await response.text();
@@ -218,7 +223,7 @@ class MotorController {
         if (setStepPeriodBtn) {
             setStepPeriodBtn.onclick = async function () {
                 try {
-                    const period = parseInt(document.getElementById('step-period').value, 10);
+                    const period = parseInt(document.getElementById('step-period').value, 20);
                     if (isNaN(period) || period < 1) {
                         showMessage('Please enter a valid step period.', 'error');
                         return;
@@ -589,25 +594,26 @@ class MotorController {
     }
 
     showMessage(message, type = 'success') {
-        // Remove existing messages
-        const existingMessages = document.querySelectorAll('.message');
-        existingMessages.forEach(msg => msg.remove());
-
-        // Create new message
-        const messageEl = document.createElement('div');
-        messageEl.className = `message ${type}`;
-        messageEl.textContent = message;
-
-        // Insert at the top of the main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.insertBefore(messageEl, mainContent.firstChild);
-
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                messageEl.remove();
-            }, 5000);
-        }
+	
+	    //        // Remove existing messages
+//        const existingMessages = document.querySelectorAll('.message');
+//        existingMessages.forEach(msg => msg.remove());
+//
+//        // Create new message
+//        const messageEl = document.createElement('div');
+//        messageEl.className = `message ${type}`;
+//        messageEl.textContent = message;
+//
+//        // Insert at the top of the main content
+//        const mainContent = document.querySelector('.main-content');
+//        if (mainContent) {
+//            mainContent.insertBefore(messageEl, mainContent.firstChild);
+//
+//            // Auto-remove after 5 seconds
+//            setTimeout(() => {
+//                messageEl.remove();
+//            }, 5000);
+//        }
     }
 
     destroy() {
