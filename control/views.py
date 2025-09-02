@@ -62,7 +62,7 @@ except ImportError as e:
     MOTOR_CONTROL_AVAILABLE = False
 
 # Motor parameters
-STEPS_PER_REVOLUTION = 3200
+STEPS_PER_REVOLUTION = 9312
 MICROSTEPS = 1
 TOTAL_STEPS_PER_REV = STEPS_PER_REVOLUTION * MICROSTEPS
 
@@ -178,7 +178,10 @@ def api_move_motor(request):
     global motor_state
     try:
         data = json.loads(request.body)
-        angle = data.get("angle", 0)
+        angle = float(data.get("angle", 0))
+        motor_state["target_position"] = angle
+        angle = motor_state["current_position"] - angle
+
         step_period = motor_state["step_delay"]
 
         # Calculate steps needed
@@ -189,9 +192,8 @@ def api_move_motor(request):
 
         # Move motor
         motor_state["is_moving"] = True
-        motor_state["target_position"] = angle
         do_steps(abs(steps),step_period)
-        motor_state["current_position"] = angle
+        motor_state["current_position"] = motor_state["target_position"] 
         motor_state["is_moving"] = False
 
         log_movement("move", {"angle": angle, "steps": steps})
