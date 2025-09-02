@@ -157,6 +157,18 @@
                 <button class="btn-gray" id="dir-minus-btn">Dir -</button>
             </div>
             <h3 style="width:100%;text-align:center;margin:10px 0 0 0;">Stepper Control</h3>
+            <!-- REFACTORED: Step Frequency section moved to first position for better UX flow -->
+            <div class="centered-group stepper-controls" id="manual-stepper-frequency">
+                <div class="field-group">
+                    <label for="step-frequency">
+                        <input type="number" id="step-frequency" placeholder="Step Frequency" min="1" max="1000"
+                            value="50">
+                        <span class="unit">(steps/sec)</span>
+                    </label>
+                </div>
+                <button class="btn-gray" id="set-step-frequency-btn">Set Step Frequency</button>
+            </div>
+            <!-- REFACTORED: Step Count section moved to second position -->
             <div class="centered-group stepper-controls" id="manual-stepper-controls">
                 <div class="field-group">
                     <label for="step-count">
@@ -165,16 +177,6 @@
                     </label>
                 </div>
                 <button class="btn-gray" id="do-steps-btn">Do steps</button>
-            </div>
-            <div class="centered-group stepper-controls" id="manual-stepper-period">
-                <div class="field-group">
-                    <label for="step-period">
-                        <input type="number" id="step-period" placeholder="Step Period (ms)" min="1" max="1000"
-                            value="20">
-                        <span class="unit">(ms)</span>
-                    </label>
-                </div>
-                <button class="btn-gray" id="set-step-period-btn">Set Step Period</button>
             </div>
         </div>
         {% endif %}

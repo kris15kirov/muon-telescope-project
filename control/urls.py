@@ -29,4 +29,6 @@ urlpatterns = [
     path("api/pause_motor/", views.api_pause_motor, name="api_pause_motor"),
     path("api/resume_motor/", views.api_resume_motor, name="api_resume_motor"),
     path("api/motor_busy/", views.api_motor_busy, name="api_motor_busy"),
+    # REFACTORED: New step frequency endpoint
+    path("api/set_step_frequency/", views.api_set_step_frequency, name="api_set_step_frequency"),
 ]

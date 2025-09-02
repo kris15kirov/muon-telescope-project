@@ -416,6 +416,30 @@ def api_set_step_period(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
+def api_set_step_frequency(request):
+    """REFACTORED: Set step frequency for motor movement (steps per second)."""
+    try:
+        data = json.loads(request.body)
+        frequency_steps_per_sec = data.get("frequency_steps_per_sec", 50)  # Default: 50 steps/sec
+
+        # REFACTORED: Convert frequency (steps/sec) to step_delay (seconds)
+        # Formula: step_delay = 1.0 / frequency
+        step_delay = 1.0 / frequency_steps_per_sec
+
+        # Store in motor state for future use
+        motor_state["step_delay"] = step_delay
+
+        log_movement("set_step_frequency", {"frequency_steps_per_sec": frequency_steps_per_sec})
+
+        return JsonResponse(
+            {"status": "success", "message": f"Step frequency set to {frequency_steps_per_sec} steps/sec"}
+        )
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
 def api_do_steps(request):
     """Perform a specific number of steps in a non-blocking way."""
     try:

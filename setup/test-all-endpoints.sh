@@ -57,6 +57,7 @@ test_endpoint "POST" "/api/enable_stepper/" "" "Enable Stepper"
 test_endpoint "POST" "/api/disable_stepper/" "" "Disable Stepper"
 test_endpoint "POST" "/api/set_direction/" '{"direction": "forward"}' "Set Direction"
 test_endpoint "POST" "/api/set_step_period/" '{"period": 1000}' "Set Step Period"
+test_endpoint "POST" "/api/set_step_frequency/" '{"frequency_steps_per_sec": 50}' "Set Step Frequency"  # REFACTORED: New endpoint
 test_endpoint "POST" "/api/do_steps/" '{"steps": 5}' "Do Steps"
 # test_endpoint "POST" "/api/do_steps_pwm/" '{"steps": 5}' "Do Steps PWM"  # PWM not needed at this point
 test_endpoint "POST" "/api/pause_motor/" "" "Pause Motor"

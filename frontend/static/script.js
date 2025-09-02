@@ -219,23 +219,26 @@ class MotorController {
                 }
             };
         }
-        const setStepPeriodBtn = document.getElementById('set-step-period-btn');
-        if (setStepPeriodBtn) {
-            setStepPeriodBtn.onclick = async function () {
+        // REFACTORED: Changed from step period to step frequency for better UX
+        const setStepFrequencyBtn = document.getElementById('set-step-frequency-btn');
+        if (setStepFrequencyBtn) {
+            setStepFrequencyBtn.onclick = async function () {
                 try {
-                    const period = parseInt(document.getElementById('step-period').value, 20);
-                    if (isNaN(period) || period < 1) {
-                        showMessage('Please enter a valid step period.', 'error');
+                    // REFACTORED: Get frequency in steps per second instead of period in milliseconds
+                    const frequency = parseInt(document.getElementById('step-frequency').value, 10);
+                    if (isNaN(frequency) || frequency < 1) {
+                        showMessage('Please enter a valid step frequency (steps per second).', 'error');
                         return;
                     }
-                    const response = await fetch('/api/set_step_period/', {
+                    // REFACTORED: Send frequency instead of period_ms to backend
+                    const response = await fetch('/api/set_step_frequency/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ period_ms: period })
+                        body: JSON.stringify({ frequency_steps_per_sec: frequency })
                     });
                     if (!response.ok) {
                         const err = await response.text();
-                        showMessage('Failed to set step period. ' + err, 'error');
+                        showMessage('Failed to set step frequency. ' + err, 'error');
                     }
                 } catch (e) {
                     showMessage('Network or JS error: ' + e, 'error');
@@ -302,11 +305,11 @@ class MotorController {
         // }
         // if (pwmToggle) {
         //     function setStepperControlState(isPwm) {
-        //         // Manual controls
+        //         // Manual controls - REFACTORED: Updated to use step-frequency instead of step-period
         //         const stepCount = document.getElementById('step-count');
-        //         const stepPeriod = document.getElementById('step-period');
+        //         const stepFrequency = document.getElementById('step-frequency');  // REFACTORED: Changed from step-period
         //         const doStepsBtn = document.getElementById('do-steps-btn');
-        //         const setStepPeriodBtn = document.getElementById('set-step-period-btn');
+        //         const setStepFrequencyBtn = document.getElementById('set-step-frequency-btn');  // REFACTORED: Changed from set-step-period-btn
         //         // PWM controls
         //         const pwmFrequency = document.getElementById('pwm-frequency');
         //         const doStepsPwmBtn = document.getElementById('do-steps-pwm-btn');
@@ -319,7 +322,7 @@ class MotorController {
         //                     }
         //                 }
         //             }
-        //         setDisabledGroup([stepCount, stepPeriod, doStepsBtn, setStepPeriodBtn], isPwm);
+        //         setDisabledGroup([stepCount, stepFrequency, doStepsBtn, setStepFrequencyBtn], isPwm);  // REFACTORED: Updated element references
         //         setDisabledGroup([pwmFrequency, doStepsPwmBtn], !isPwm);
         //     }
         //     pwmToggle.addEventListener('change', function () {
