@@ -148,13 +148,6 @@
             <input type="checkbox" id="advanced-toggle"> Enable advanced controls
         </label>
         <div class="advanced" id="advanced-controls">
-            <div class="row" style="justify-content: center;">
-                {% if user.is_staff or user.is_superuser %}
-                {% endif %}
-		<!--        <button class="btn-gray" id="quit-motor-btn">Quit Motor</button> --!>
-                <button class="btn-gray" id="pause-motor-btn">Pause Motor</button>
-                <button class="btn-gray" id="resume-motor-btn">Resume Motor</button>
-            </div>
             <div class="row advanced-btn-row">
                 <button class="btn-gray" id="enable-stepper-btn">Enable Stepper</button>
                 <button class="btn-gray" id="disable-stepper-btn">Disable Stepper</button>
@@ -167,31 +160,21 @@
             <div class="centered-group stepper-controls" id="manual-stepper-controls">
                 <div class="field-group">
                     <label for="step-count">
-                        <input type="number" id="step-count" placeholder="Steps" min="-100000" max="100000" value="20">
+                        <input type="number" id="step-count" placeholder="Steps" min="0" max="1000" value="100">
                         <span class="unit">(steps)</span>
                     </label>
                 </div>
-                <button class="btn-gray" id="set-step-period-btn">Set Step Period</button>
+                <button class="btn-gray" id="do-steps-btn">Do steps</button>
             </div>
             <div class="centered-group stepper-controls" id="manual-stepper-period">
                 <div class="field-group">
                     <label for="step-period">
                         <input type="number" id="step-period" placeholder="Step Period (ms)" min="1" max="1000"
-                            value="2">
+                            value="20">
                         <span class="unit">(ms)</span>
                     </label>
                 </div>
-                <button class="btn-gray" id="do-steps-btn">Do steps</button>
-                <label for="pwm-checkbox" style="margin-left:8px;">
-                    <input type="checkbox" id="pwm-checkbox"> Smooth (PWM) stepping
-                </label>
-                <div class="field-group">
-                    <label for="pwm-frequency">
-                        <input type="number" id="pwm-frequency" min="1" max="1000" value="500">
-                        <span class="unit">(Hz)</span>
-                    </label>
-                </div>
-                <button id="do-steps-pwm-btn" class="btn btn-success">Do steps (PWM)</button>
+                <button class="btn-gray" id="set-step-period-btn">Set Step Period</button>
             </div>
         </div>
         {% endif %}
