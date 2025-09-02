@@ -10,7 +10,7 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 - **Real-time Updates**: Live status updates (Angle, Counts per Second)
 - **Advanced Controls**: Step frequency control, manual stepping, direction control
 - **Network Access**: Works on university network for easy access
-- **Movement Logging**: Tracks motor movements in memory (last 100 actions)
+
 
 ## 🏗️ Architecture
 
@@ -26,16 +26,16 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 │                 │    │ │   Nginx     │    │    │ │   GPIO      │ │
 │                 │    │ │   HTTPS     │    │    │ │  Control    │ │
 │                 │    │ │   Proxy     │    │    │ └─────────────┘ │
-│                 │    │ └─────────────┘    │    │ └─────────────────┘
+│                 │    │ └─────────────┘    │    └─────────────────┘
 └─────────────────┘    └────────────────────┘
 ```
 
 ## 📋 Requirements
 
 ### Hardware
-- Raspberry Pi 3B+ (or compatible)
+- Raspberry Pi 3B+
 - DM556 stepper motor driver
-- Stepper motor (200 steps/revolution recommended)
+- Stepper motor (DM556)
 - Power supply for motor driver
 - Jumper wires for GPIO connections
 
@@ -60,9 +60,9 @@ A complete Raspberry Pi-based system for controlling a stepper motor telescope v
 | GPIO 17 (Pin 11) | EN+          | Enable (active low) |
 | GPIO 27 (Pin 13) | DIR+         | Direction control |
 | GPIO 22 (Pin 15) | PUL+         | Step pulse |
-| 3.3V (Pin 1/17) | VCC          | Logic power supply |
-| GND (Pin 6,30,34) | GND          | Common ground |
-| External 24-48V | Motor Power | Motor power supply |
+| 3.3V (Pin 1/17) | VCC           | Logic power supply |
+| GND (Pin 6,30,34) | GND         | Common ground |
+| External 24-48V | Motor Power   | Motor power supply |
 
 ### Wiring Diagram
 ```
@@ -144,8 +144,6 @@ muon-telescope-project/
 
 ### Motor Parameters
 Edit `muon_telescope/motor_control.py`:
-- `STEPS_PER_REVOLUTION`: Motor steps per revolution (default: 200)
-- `MICROSTEPS`: Driver microstepping (default: 16)
 - `ENABLE_PIN`: GPIO 17 (Pin 11)
 - `DIR_PIN`: GPIO 27 (Pin 13)  
 - `STEP_PIN`: GPIO 22 (Pin 15)
@@ -190,11 +188,3 @@ Edit `muon_telescope/motor_control.py`:
 - **Static Files**: Served via Django/WhiteNoise
 - **Logging**: In-memory movement logging (non-persistent)
 - **Security**: Password hashing, session management, role-based access
-
----
-
-## 📚 Additional Documentation
-
-- **`DEVELOPMENT.md`**: Development environment setup
-- **`UNIVERSITY_SETUP.md`**: University network configuration
-- **`TROUBLESHOOTING_PLAN.md`**: Common issues and solutions
