@@ -38,18 +38,26 @@ except (ImportError, RuntimeError):
     GPIO = MockGPIO()
     GPIO.PWM = MockGPIO.PWM
 
+
+# Global motor state
+motor_state = {
+    "is_moving": False,
+    "current_position": 0,
+    "target_position": 0,
+    "is_enabled": False,
+    "step_delay": 0.020,
+    "paused" : False,
+}
+
 ENABLE_PIN = 17  # Enable pin (active low)
 DIR_PIN = 27  # Direction pin
 STEP_PIN = 22  # Step pin
-PWM_FREQ = 500  # Hz
 motor_lock = threading.Lock()
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(ENABLE_PIN, GPIO.OUT)
 GPIO.setup(DIR_PIN, GPIO.OUT)
 GPIO.setup(STEP_PIN, GPIO.OUT)
-pwm = GPIO.PWM(STEP_PIN, PWM_FREQ)
-pwm_started = False
-
+GPIO.output(ENABLE_PIN, GPIO.LOW)
 
 def enable_motor():
     GPIO.output(ENABLE_PIN, GPIO.LOW)
@@ -63,37 +71,16 @@ def set_direction(direction):
     GPIO.output(DIR_PIN, GPIO.HIGH if direction else GPIO.LOW)
 
 
-def do_steps(steps, step_delay=0.002):
+def do_steps(steps, step_delay):
+    global motor_state
     with motor_lock:
-        for _ in range(abs(steps)):
+        ii=0
+        while ii < abs(steps):
+            ii += 1
             GPIO.output(STEP_PIN, GPIO.HIGH)
             time.sleep(step_delay / 2)
             GPIO.output(STEP_PIN, GPIO.LOW)
             time.sleep(step_delay / 2)
-
-
-# def do_steps_pwm(steps, frequency=500):
-#    global pwm_started
-#    with motor_lock:
-#        try:
-#            enable_motor()
-#            set_direction(steps > 0)
-#
-#            # Calculate step delay based on frequency
-#            step_delay = 1.0 / frequency
-#
-#            # Use direct stepping for reliability (no PWM)
-#            for _ in range(abs(steps)):
-#                GPIO.output(STEP_PIN, GPIO.HIGH)
-#                time.sleep(step_delay / 2)
-#                GPIO.output(STEP_PIN, GPIO.LOW)
-#                time.sleep(step_delay / 2)
-#
-#            disable_motor()
-#        except Exception as e:
-#            print(f"Error in do_steps_pwm: {e}")
-#            disable_motor()
-#            raise
 
 
 def cleanup():
@@ -103,12 +90,12 @@ def cleanup():
 motor_thread = None
 
 
-def _motor_worker(steps, step_delay=0.002):
+def _motor_worker(steps, step_delay):
     with motor_lock:
         do_steps(steps, step_delay)
 
 
-def start_motor(steps, step_delay=0.002):
+def start_motor(steps, step_delay):
     global motor_thread
     if motor_thread is not None and motor_thread.is_alive():
         return False

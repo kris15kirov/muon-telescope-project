@@ -37,6 +37,7 @@ try:
         cleanup,
         start_motor,
         is_motor_busy,
+        motor_state
     )
 
     MOTOR_CONTROL_AVAILABLE = True
@@ -65,13 +66,15 @@ STEPS_PER_REVOLUTION = 3200
 MICROSTEPS = 1
 TOTAL_STEPS_PER_REV = STEPS_PER_REVOLUTION * MICROSTEPS
 
-# Global motor state
-motor_state = {
-    "is_moving": False,
-    "current_position": 0,
-    "target_position": 0,
-    "is_enabled": False,
-}
+## Global motor state
+#motor_state = {
+#    "is_moving": False,
+#    "current_position": 0,
+#    "target_position": 0,
+#    "is_enabled": False,
+#    "step_delay": 0.020,
+#    "paused" : False,
+#}
 
 # Movement logs
 movement_logs = []
@@ -172,9 +175,11 @@ def register(request):
 @require_http_methods(["POST"])
 def api_move_motor(request):
     """Move motor to specified angle."""
+    global motor_state
     try:
         data = json.loads(request.body)
         angle = data.get("angle", 0)
+        step_period = motor_state["step_delay"]
 
         # Calculate steps needed
         steps = int((angle / 360) * TOTAL_STEPS_PER_REV)
@@ -185,7 +190,7 @@ def api_move_motor(request):
         # Move motor
         motor_state["is_moving"] = True
         motor_state["target_position"] = angle
-        do_steps(abs(steps))
+        do_steps(abs(steps),step_period)
         motor_state["current_position"] = angle
         motor_state["is_moving"] = False
 
@@ -206,6 +211,7 @@ def api_move_motor(request):
 @require_http_methods(["POST"])
 def api_stop_motor(request):
     """Stop motor movement."""
+    global motor_state
     try:
         motor_state["is_moving"] = False
 
@@ -279,18 +285,17 @@ def api_goto_angle(request):
 def api_set_zero_position(request):
     """Set zero position reference."""
     try:
-        data = json.loads(request.body)
-        zero_pos = int(data.get("position", 0))
+        enable_motor()
 
-        motor_state["current_position"] = zero_pos
+        motor_state["current_position"] = 0
 
         log_movement("set_zero", {"zero_position": zero_pos})
 
         return JsonResponse(
             {
                 "status": "success",
-                "message": f"Zero position set to {zero_pos}",
-                "zero_position": zero_pos,
+                "message": f"Zero position set to 0",
+                "zero_position": 0,
             }
         )
     except Exception as e:
@@ -514,9 +519,11 @@ def api_quit_motor(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def api_pause_motor(request):
+    global motor_state
     """Pause motor movement."""
     try:
-        motor_pause_event.clear()
+        #motor_pause_event.clear()
+        motor_state["pased"] = True
         log_movement("pause_motor", {})
         return JsonResponse({"status": "success", "message": "Motor paused"})
     except Exception as e:
@@ -527,8 +534,10 @@ def api_pause_motor(request):
 @require_http_methods(["POST"])
 def api_resume_motor(request):
     """Resume motor movement."""
+    global motor_state
     try:
-        motor_pause_event.set()
+        #motor_pause_event.set()
+        motor_state["poased"] = False
         log_movement("resume_motor", {})
         return JsonResponse({"status": "success", "message": "Motor resumed"})
     except Exception as e:
